@@ -5809,6 +5809,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "AppointmentSystem.Core >= 1.0.0",
       "AppointmentSystem.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.0",
       "Microsoft.AspNetCore.Authentication.OpenIdConnect >= 5.0.0",
@@ -5842,6 +5843,9 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
+            "C:\\Users\\HP\\Documents\\plamen\\AppointmentSystem\\Server\\AppointmentSystem.Core\\AppointmentSystem.Core.csproj": {
+              "projectPath": "C:\\Users\\HP\\Documents\\plamen\\AppointmentSystem\\Server\\AppointmentSystem.Core\\AppointmentSystem.Core.csproj"
+            },
             "C:\\Users\\HP\\Documents\\plamen\\AppointmentSystem\\Server\\AppointmentSystem.Infrastructure\\AppointmentSystem.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\HP\\Documents\\plamen\\AppointmentSystem\\Server\\AppointmentSystem.Infrastructure\\AppointmentSystem.Infrastructure.csproj"
             }

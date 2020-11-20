@@ -25,6 +25,7 @@
     ".NETCoreApp,Version=v5.0": {
       "AppointmentSystem.Server/1.0.0": {
         "dependencies": {
+          "AppointmentSystem.Core": "1.0.0",
           "AppointmentSystem.Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "5.0.0",
           "Microsoft.AspNetCore.Authentication.OpenIdConnect": "5.0.0",
