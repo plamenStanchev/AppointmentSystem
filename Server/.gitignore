@@ -144,6 +144,16 @@ coverage*[.json, .xml, .info]
 *.coverage
 *.coveragexml
 
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
 # NCrunch
 _NCrunch_*
 .*crunch*.local.xml
