@@ -21,7 +21,6 @@
 
             var dbContext = services.ServiceProvider.GetService<ApplicationDbContext>();
 
-
             dbContext.Database.Migrate();
         }
     }

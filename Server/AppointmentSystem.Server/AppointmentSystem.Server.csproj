@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0">
@@ -16,12 +23,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\AppointmentSystem.Core\AppointmentSystem.Core.csproj" />
+    <ProjectReference Include="..\AppointmentSystem.Infrastructure\AppointmentSystem.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppointmentSystem.Core\AppointmentSystem.Core.csproj" />
-    <ProjectReference Include="..\AppointmentSystem.Infrastructure\AppointmentSystem.Infrastructure.csproj" />
+    <Folder Include="Features\Appointmets\Controllers\" />
+    <Folder Include="Features\Appointmets\Models\" />
+    <Folder Include="Features\Citys\Controllers\" />
+    <Folder Include="Features\Citys\Models\" />
+    <Folder Include="Features\Doctors\Controllers\" />
+    <Folder Include="Features\Doctors\Models\" />
+    <Folder Include="Features\Patients\Controllers\" />
+    <Folder Include="Features\Patients\Models\" />
   </ItemGroup>
 
 </Project>

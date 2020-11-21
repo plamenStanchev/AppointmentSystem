@@ -9,5 +9,10 @@
                 .Claims
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
                 ?.Value;
+        public static string GetRole(this ClaimsPrincipal user)
+           => user
+               .Claims
+           .FirstOrDefault(u => u.Type == ClaimTypes.Role)
+           ?.Value;
     }
 }

@@ -2,7 +2,7 @@
 {
     using AppointmentSystem.Core.Entities.Base;
     using AppointmentSystem.Core.Entities.Models;
-    using AppointmentSystem.Core.Interfaces;
+    using AppointmentSystem.Core.Interfaces.Infrastructure;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;

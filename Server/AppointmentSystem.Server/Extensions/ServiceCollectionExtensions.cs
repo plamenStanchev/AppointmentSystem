@@ -1,12 +1,15 @@
 ﻿namespace AppointmentSystem.Server.Extensions
 {
-    using AppointmentSystem.Core.Interfaces;
+    using AppointmentSystem.Core.Interfaces.Features;
+    using AppointmentSystem.Core.Interfaces.Infrastructure;
     using AppointmentSystem.Core.Interfaces.Repository;
     using AppointmentSystem.Infrastructure.Data;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Infrastructure.Data.Repositories;
     using AppointmentSystem.Infrastructure.Logging;
     using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Server.Features.Identity;
+
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -36,7 +39,8 @@
            => services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
                       .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
                       .AddTransient<ICurrentUserService, CurrentUserService>()
-                      .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
+                      .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
+                      .AddTransient<IUserService, UserService>();
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services

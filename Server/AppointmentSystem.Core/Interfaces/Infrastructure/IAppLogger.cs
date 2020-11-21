@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Core.Interfaces
+﻿namespace AppointmentSystem.Core.Interfaces.Infrastructure
 {
     /// <summary>
     /// This type eliminates the need to depend directly on the ASP.NET Core logging types.

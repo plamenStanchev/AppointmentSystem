@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Core.Interfaces
+﻿namespace AppointmentSystem.Core.Interfaces.Infrastructure
 {
     public interface ICurrentUserService
     {

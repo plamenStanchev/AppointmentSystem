@@ -40,7 +40,14 @@ namespace AppointmentSystem.Server
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
+            app.UseRouting()
+                .UseCors(options =>
+                {
+                    options.AllowAnyOrigin();
+                    options.AllowAnyMethod();
+                    options.AllowAnyHeader();
+
+                });
 
             app.UseAuthentication()
                 .UseAuthorization();

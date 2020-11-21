@@ -1,6 +1,6 @@
 ﻿namespace AppointmentSystem.Infrastructure.Services
 {
-    using AppointmentSystem.Core.Interfaces;
+    using AppointmentSystem.Core.Interfaces.Infrastructure;
     using AppointmentSystem.Infrastructure.Extensions;
     using Microsoft.AspNetCore.Http;
     using System.Security.Claims;

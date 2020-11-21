@@ -1,6 +1,6 @@
 ﻿namespace AppointmentSystem.Infrastructure.Logging
 {
-    using AppointmentSystem.Core.Interfaces;
+    using AppointmentSystem.Core.Interfaces.Infrastructure;
     using Microsoft.Extensions.Logging;
 
     public class LoggerAdapter<T> : IAppLogger<T>
