@@ -8,8 +8,11 @@
     using AppointmentSystem.Infrastructure.Data.Repositories;
     using AppointmentSystem.Infrastructure.Logging;
     using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Server.Features.Citys;
+    using AppointmentSystem.Server.Features.Department;
+    using AppointmentSystem.Server.Features.Doctors;
     using AppointmentSystem.Server.Features.Identity;
-
+    using AppointmentSystem.Server.Features.Patients;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -40,7 +43,11 @@
                       .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
                       .AddTransient<ICurrentUserService, CurrentUserService>()
                       .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
-                      .AddTransient<IUserService, UserService>();
+                      .AddTransient<IUserService, UserService>()
+                      .AddTransient<ICityService, CityService>()
+                      .AddTransient<IDepartmentService, DepartmentService>()
+                      .AddTransient<IDoctorService, DoctorService>()
+                      .AddTransient<IPatientService, PatientService>();
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services

@@ -2,6 +2,7 @@
 {
     public class Result
     {
+
         public bool Succeeded { get; private set; }
 
         public bool Failure => !this.Succeeded;

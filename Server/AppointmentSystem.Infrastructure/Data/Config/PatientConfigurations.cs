@@ -18,6 +18,14 @@
                 .IsRequired()
                 .HasMaxLength(30);
 
+            builder.Property(p => p.SecondName)
+                   .IsRequired()
+                   .HasMaxLength(30);
+
+            builder.Property(p => p.PIN)
+                .IsRequired()
+                .HasMaxLength(11);
+
             builder.Property(p => p.Address)
                 .IsRequired()
                 .HasMaxLength(100);
