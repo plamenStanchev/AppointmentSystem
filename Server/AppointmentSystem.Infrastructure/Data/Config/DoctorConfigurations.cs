@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Infrastructure.Data.Config
+﻿ namespace AppointmentSystem.Infrastructure.Data.Config
 {
     using AppointmentSystem.Core.Entities.Models;
     using Microsoft.EntityFrameworkCore;
@@ -20,6 +20,10 @@
                 .WithMany(d => d.Doctors)
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(d => d.PIN)
+                .IsRequired()
+                .HasMaxLength(11);
 
             builder.Property(d => d.FistName)
                 .IsRequired()
