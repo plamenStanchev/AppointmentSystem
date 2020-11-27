@@ -14,7 +14,7 @@
 
     public class UserService : IUserService
     {
-        private UserManager<ApplicationUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserService(UserManager<ApplicationUser> userManager)
         {

@@ -13,9 +13,9 @@
     //TODO : Move validation in difrent methods
     public class AppointmentService : IAppointmentService
     {
-        private IDeletableEntityRepository<Appointment> appointmentRepository;
-        private IDeletableEntityRepository<Patient> patientRepository;
-        private IDeletableEntityRepository<Doctor> doctorRepository;
+        private readonly IDeletableEntityRepository<Appointment> appointmentRepository;
+        private readonly IDeletableEntityRepository<Patient> patientRepository;
+        private readonly IDeletableEntityRepository<Doctor> doctorRepository;
 
         public AppointmentService(
             IDeletableEntityRepository<Appointment> appointmentRepository,
