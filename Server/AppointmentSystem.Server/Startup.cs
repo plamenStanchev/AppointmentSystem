@@ -38,6 +38,8 @@ namespace AppointmentSystem.Server
                 app.UseSwaggerUI();
             }
 
+            app.AddMapperProfiles();
+
             app.UseHttpsRedirection();
 
             app.UseRouting()

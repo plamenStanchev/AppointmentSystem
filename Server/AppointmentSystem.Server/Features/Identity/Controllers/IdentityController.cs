@@ -3,7 +3,6 @@
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
-    using AppointmentSystem.Server.Features.Identity;
     using AppointmentSystem.Server.Features.Identity.Models;
 
     using Microsoft.AspNetCore.Authorization;

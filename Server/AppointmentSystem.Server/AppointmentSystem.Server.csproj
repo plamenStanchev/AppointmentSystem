@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AppointmentSystem.Core\AppointmentSystem.Core.csproj" />
     <ProjectReference Include="..\AppointmentSystem.Infrastructure\AppointmentSystem.Infrastructure.csproj" />
+    <ProjectReference Include="..\AppointmentSystem.Mapper\AppointmentSystem.Mapper.csproj" />
   </ItemGroup>
 
   <ItemGroup>
