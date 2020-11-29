@@ -10,7 +10,7 @@
 
     public class DepartmentService : IDepartmentService
     {
-        private IDeletableEntityRepository<Department> repository;
+        private readonly IDeletableEntityRepository<Department> repository;
 
         public DepartmentService(IDeletableEntityRepository<Department> repository)
         {

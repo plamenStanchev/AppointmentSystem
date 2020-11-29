@@ -1,14 +1,14 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data.Seed
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Infrastructure.Constants;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-    internal class PatientSeeder : ISeeder
+    public class DoctorSeed : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -20,33 +20,32 @@
             {
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
-            if (dbContext.Patients.Any())
+            if (dbContext.Doctors.Any())
             {
                 return;
             }
+
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            await this.SeedPatients(
-                dbContext,
+            await this.SeedDoctor(dbContext,
                 userManager,
-                "SomeShmukPatiient",
-                "SoSecondName",
-                "SMAKDMAI",
-                "158cfb78-1376-4901-ab8c-270aaa7e5f03",
-                2,
-                "1444444444",
-                "SomeADddersOFSomeShmuk");
-            await this.SeedPatients(
-                dbContext,
-                userManager,
-                "SomeShmukPatiient21",
-                "SoSecondName32",
-                "SMAKDMA131I",
-                "8a1fd999-fba0-4661-9af8-2c1651f94ab3",
+                "SomeShmuk",
+                "SomeShmukSecondName",
+                "SomeSHmukSurName",
+                "37a71afc-58dd-4a37-bbfc-77c954336a62",
                 1,
-                "1444467544",
-                "SomeAddres");
+                2,
+                "121436299");
+            await this.SeedDoctor(dbContext,
+                userManager,
+                "SomeShmuk2",
+                "SomeShmukSecondName2",
+                "SomeSHmukSurName2",
+                "cae52c34-a121-432f-a8d9-e74d988e5812",
+                2,
+                3,
+                "123456799");
         }
-        private async Task SeedPatients(
+        private async Task SeedDoctor(
             ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager,
             string firstName,
@@ -54,21 +53,21 @@
             string surName,
             string accountId,
             int cityId,
-            string PIN,
-            string address)
+            int departmentId,
+            string PIN)
         {
-            await dbContext.Patients.AddAsync(new Patient()
+            dbContext.Doctors.Add(new Doctor()
             {
                 FistName = firstName,
                 SecondName = secondName,
                 SurName = surName,
                 AccountId = accountId,
                 CityId = cityId,
-                PIN = PIN,
-                Address= address
+                DepartmentId = departmentId,
+                PIN =PIN
             });
             var user = await userManager.FindByIdAsync(accountId);
-            await userManager.AddToRoleAsync(user, RolesNames.PatientRoleName);
+            await userManager.AddToRoleAsync(user, RolesNames.DoctorRoleName);
         }
     }
 }
