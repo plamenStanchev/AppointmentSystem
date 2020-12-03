@@ -51,11 +51,11 @@
             
         }
 
-        public async Task<Result> DeletePatientAsync(int patientId, string accountId)
+        public async Task<Result> DeletePatientAsync(string accountId)
         {
             var patientResult = await this.repository
                 .All().FirstOrDefaultAsync(
-                p => p.Id == patientId);
+                p => p.AccountId == accountId);
             
             Result returntResult = new Result();
             if (patientResult is null)
@@ -72,11 +72,10 @@
             return true;
         }
 
-        public async Task<Patient> GetPatientAsync(int patientId, string accountId)
+        public async Task<Patient> GetPatientAsync(string accountId)
         => await this.repository.All()
                 .FirstOrDefaultAsync(
-                p => p.Id == patientId
-                && p.AccountId == accountId);
+                p => p.AccountId == accountId);
 
         public async Task<Result> UpdatePatientAsync(Patient patient)
         {

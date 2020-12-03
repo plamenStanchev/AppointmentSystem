@@ -12,8 +12,6 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    [Route("api/[controller]")]
-    [ApiController]
     public class IdentityController : ApiController
     {
         private readonly UserManager<ApplicationUser> userManager;
@@ -38,16 +36,6 @@
         [Route(nameof(Register))]
         public async Task<ActionResult<LoginResponseModel>> Register([FromBody] RegisterRequestModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                var erros = this.ModelState
-                    .Select(m => m.Value.Errors)
-                    .Where(m => m.Count > 0)
-                    .ToList();
-
-                return BadRequest(erros);
-            }
-
             var user = new ApplicationUser()
             {
                 Email = model.Email,
@@ -81,15 +69,6 @@
         [Route(nameof(Login))]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {
-            if (!this.ModelState.IsValid)
-            {
-                var erros = this.ModelState
-                    .Select(m => m.Value.Errors)
-                    .Where(m => m.Count > 0)
-                    .ToList();
-
-                return BadRequest(erros);
-            }
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
@@ -114,7 +93,8 @@
             {
                 Token = token,
                 HasRole = false,
-                Role = string.Empty
+                Role = string.Empty,
+                Succeeded = true
             };
 
             if (roles.Count > 0)

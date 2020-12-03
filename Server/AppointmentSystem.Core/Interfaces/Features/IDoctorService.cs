@@ -8,11 +8,11 @@
     {
         public Task<Result> CreateDoctorAsynch(Doctor doctors);
 
-        public Task<Result> DeleteDoctorAsync(int doctorId, string accountId);
+        public Task<Result> DeleteDoctorAsync(string accountId);
 
         public Task<Result> UpdateDoctorAsync(Doctor doctor);
 
-        public Task<Doctor> GetDoctorAsync(int doctorId, string accoutId);
+        public Task<Doctor> GetDoctorAsync(string accoutId);
 
         public Task<IEnumerable<Doctor>> GetDoctorsInCity(int cityId);
     }

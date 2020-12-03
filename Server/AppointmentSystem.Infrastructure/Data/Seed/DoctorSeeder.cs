@@ -8,7 +8,7 @@
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
-    public class DoctorSeed : ISeeder
+    public class DoctorSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -58,7 +58,7 @@
         {
             dbContext.Doctors.Add(new Doctor()
             {
-                FistName = firstName,
+                FirstName = firstName,
                 SecondName = secondName,
                 SurName = surName,
                 AccountId = accountId,

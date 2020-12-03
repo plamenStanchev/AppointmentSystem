@@ -29,7 +29,7 @@
         {
             var patientChek = await this.patientRepository.All()
                 .FirstOrDefaultAsync(p => p.AccountId == patientAccountId);
-            if (patientChek?.Id == appointment.PatientId 
+            if (patientChek?.Id != appointment.PatientId
                 || patientChek is null)
             {
                 return "Problem With Patient";
@@ -39,7 +39,7 @@
             var result = await this.appointmentRepository.SaveChangesAsync();
             if (result == 0)
             {
-                return "ther was a problem adding the the record";
+                return "Ther was a problem adding the the record";
             }
             return true;
 
@@ -87,9 +87,9 @@
                         Doctor = a.Doctor,
                         Patient = a.Patient,
                     },
-                    Patient = a.Patient.FistName,
+                    Patient = a.Patient.FirstName,
                     Department = a.Department.Name,
-                    Doctor = a.Doctor.FistName,
+                    Doctor = a.Doctor.FirstName,
                 }).ToListAsync();
 
             return appointmets?.Select(a => a.Appointment);
@@ -115,10 +115,12 @@
                             AppointmentEnd = a.AppointmentEnd,
                             Doctor = a.Doctor,
                             Patient = a.Patient,
+                            PatientId = a.PatientId,
+                            DoctorId = a.DoctorId
                         },
-                        Patient = a.Patient.FistName,
+                        Patient = a.Patient.FirstName,
                         Department = a.Department.Name,
-                        Doctor = a.Doctor.FistName,
+                        Doctor = a.Doctor.FirstName,
                     }).ToListAsync();
 
             return appointmets.Select(a => a.Appointment);

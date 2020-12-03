@@ -14,7 +14,7 @@
                .UseSwagger()
                .UseSwaggerUI(options =>
                {
-                   options.SwaggerEndpoint("/swagger/v1/swagger.json", "My AppointmentSystem Api");
+                   options.SwaggerEndpoint("/swagger/v1/swagger.json", "AppointmentSystemApi");
                    options.RoutePrefix = string.Empty;
                });
         public static void ApplyMigrations(this IApplicationBuilder app)

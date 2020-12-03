@@ -10,7 +10,7 @@
         {
             builder.HasKey(d => d.Id);
 
-            builder.Property(p => p.FistName)
+            builder.Property(p => p.FirstName)
                 .IsRequired()
                 .HasMaxLength(30);
 

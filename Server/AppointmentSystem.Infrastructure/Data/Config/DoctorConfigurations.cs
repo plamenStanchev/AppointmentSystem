@@ -25,7 +25,7 @@
                 .IsRequired()
                 .HasMaxLength(11);
 
-            builder.Property(d => d.FistName)
+            builder.Property(d => d.FirstName)
                 .IsRequired()
                 .HasMaxLength(30);
 

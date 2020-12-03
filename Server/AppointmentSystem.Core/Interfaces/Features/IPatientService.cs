@@ -7,11 +7,11 @@
     {
         public Task<Result> CreatePatientAsync(Patient patient);
 
-        public Task<Patient> GetPatientAsync(int patientId, string accountId);
+        public Task<Patient> GetPatientAsync(string accountId);
 
         public Task<Result> UpdatePatientAsync(Patient patient);
 
-        public Task<Result> DeletePatientAsync(int patientId, string accountId);
+        public Task<Result> DeletePatientAsync(string accountId);
 
 
     }

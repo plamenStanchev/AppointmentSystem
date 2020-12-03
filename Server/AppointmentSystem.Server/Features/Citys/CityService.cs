@@ -21,7 +21,7 @@
             var result = await this.repository.SaveChangesAsync();
             if (result == 0)
             {
-                return"No record wher added";
+                return "No record wher added";
             }
             return true;
         }
@@ -47,6 +47,10 @@
         => await this.repository
             .AllAsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == cityId);
+
+        public async Task<IEnumerable<City>> GetAllCitiesAsync()
+        => await this.repository.AllAsNoTracking()
+            .ToListAsync();
 
         public async Task<Result> UpdateCityAsync(City city)
         {

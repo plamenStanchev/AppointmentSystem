@@ -59,7 +59,7 @@
         {
             await dbContext.Patients.AddAsync(new Patient()
             {
-                FistName = firstName,
+                FirstName = firstName,
                 SecondName = secondName,
                 SurName = surName,
                 AccountId = accountId,

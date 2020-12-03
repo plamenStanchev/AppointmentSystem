@@ -28,13 +28,4 @@
     <ProjectReference Include="..\AppointmentSystem.Mapper\AppointmentSystem.Mapper.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Appointmets\Controllers\" />
-    <Folder Include="Features\Appointmets\Models\" />
-    <Folder Include="Features\Citys\Controllers\" />
-    <Folder Include="Features\Department\Controllers\" />
-    <Folder Include="Features\Doctors\Controllers\" />
-    <Folder Include="Features\Patients\Controllers\" />
-  </ItemGroup>
-
 </Project>

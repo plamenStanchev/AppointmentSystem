@@ -22,6 +22,7 @@ namespace AppointmentSystem.Server
             services
                 .AddDatabase(this.Configuration)
                 .AddIdentity()
+                .AddAuthorizationFallback()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                 .AddApplicationServices()
                 .AddSwagger()
@@ -37,7 +38,7 @@ namespace AppointmentSystem.Server
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerUI();
             }
-
+            
             app.AddMapperProfiles();
 
             app.UseHttpsRedirection();
