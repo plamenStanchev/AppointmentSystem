@@ -10,13 +10,21 @@
         {
             builder.HasKey(d => d.Id);
 
-            builder.Property(p => p.FistName)
+            builder.Property(p => p.FirstName)
                 .IsRequired()
                 .HasMaxLength(30);
 
             builder.Property(p => p.SurName)
                 .IsRequired()
                 .HasMaxLength(30);
+
+            builder.Property(p => p.SecondName)
+                   .IsRequired()
+                   .HasMaxLength(30);
+
+            builder.Property(p => p.PIN)
+                .IsRequired()
+                .HasMaxLength(11);
 
             builder.Property(p => p.Address)
                 .IsRequired()

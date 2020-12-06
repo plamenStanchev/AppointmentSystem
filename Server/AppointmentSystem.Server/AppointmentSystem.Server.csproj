@@ -25,17 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AppointmentSystem.Core\AppointmentSystem.Core.csproj" />
     <ProjectReference Include="..\AppointmentSystem.Infrastructure\AppointmentSystem.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Appointmets\Controllers\" />
-    <Folder Include="Features\Appointmets\Models\" />
-    <Folder Include="Features\Citys\Controllers\" />
-    <Folder Include="Features\Citys\Models\" />
-    <Folder Include="Features\Doctors\Controllers\" />
-    <Folder Include="Features\Doctors\Models\" />
-    <Folder Include="Features\Patients\Controllers\" />
-    <Folder Include="Features\Patients\Models\" />
+    <ProjectReference Include="..\AppointmentSystem.Mapper\AppointmentSystem.Mapper.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.IdentityModel.Tokens;
+
     using System;
     using System.IdentityModel.Tokens.Jwt;
     using System.Linq;
@@ -13,7 +14,7 @@
 
     public class UserService : IUserService
     {
-        private UserManager<ApplicationUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserService(UserManager<ApplicationUser> userManager)
         {
@@ -57,6 +58,5 @@
 
             return encryptedToken;
         }
-
     }
 }

@@ -1,12 +1,19 @@
 ﻿namespace AppointmentSystem.Server.Features.BaseFeatures.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
+    using AppointmentSystem.Infrastructure.Services;
     using Microsoft.AspNetCore.Mvc;
 
-    [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public abstract class ApiController : ControllerBase
     {
+        protected virtual ActionResult<Result> GenerateResultResponse(Result result)
+        {
+            if (result.Succeeded)
+            {
+                return this.Ok(result);
+            }
+            return this.BadRequest(result.Error);
+        }
     }
 }

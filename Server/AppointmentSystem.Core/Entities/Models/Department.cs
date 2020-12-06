@@ -8,10 +8,10 @@
 
         public string Name { get; set; }
 
-        public ICollection<Doctor> Doctors { get; set; }
+        public IReadOnlyCollection<Doctor> Doctors { get; set; }
             = new HashSet<Doctor>();
 
-        public ICollection<Appointment> Appointments { get; set; }
+        public IReadOnlyCollection<Appointment> Appointments { get; set; }
             = new HashSet<Appointment>();
     }
 }

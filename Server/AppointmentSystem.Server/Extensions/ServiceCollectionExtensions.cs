@@ -8,14 +8,22 @@
     using AppointmentSystem.Infrastructure.Data.Repositories;
     using AppointmentSystem.Infrastructure.Logging;
     using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Mapper;
+    using AppointmentSystem.Server.Features.Appointmets;
+    using AppointmentSystem.Server.Features.Citys;
+    using AppointmentSystem.Server.Features.Department;
+    using AppointmentSystem.Server.Features.Doctors;
     using AppointmentSystem.Server.Features.Identity;
-
+    using AppointmentSystem.Server.Features.Patients;
+    using AutoMapper;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using System.Linq;
     using System.Text;
 
     public static class ServiceCollectionExtensions
@@ -40,7 +48,13 @@
                       .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
                       .AddTransient<ICurrentUserService, CurrentUserService>()
                       .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
-                      .AddTransient<IUserService, UserService>();
+                      .AddTransient<IUserService, UserService>()
+                      .AddTransient<ICityService, CityService>()
+                      .AddTransient<IDepartmentService, DepartmentService>()
+                      .AddTransient<IDoctorService, DoctorService>()
+                      .AddTransient<IPatientService, PatientService>()
+                      .AddTransient<IAppointmentService, AppointmentService>()
+                      .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
@@ -61,7 +75,15 @@
                         Title = "AppointmentSystem.Server",
                         Version = "v1"
                     });
+                c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });
+        public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
+        => services.AddAuthorization(optins =>
+        {
+            optins.FallbackPolicy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .Build();
+        });
 
         public static IServiceCollection AddJwtAuthentication(
            this IServiceCollection services,

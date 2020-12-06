@@ -26,8 +26,10 @@
                               new RoleSeeder(),
                               new CitySeeder(),
                               new DepartmentSeeder(),
+                              new UserSeed(),
                               new PatientSeeder(),
-                              new UserSeed()
+                              new DepartmentSeeder(),
+                              new DoctorSeeder()
                           };
 
             foreach (var seeder in seeders)
