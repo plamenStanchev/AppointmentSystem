@@ -14,6 +14,8 @@
 
         public Task<Result> DeleteCityAsync(City city);
 
+        public Task<IEnumerable<City>> GetAllCitiesAsync();
+
         public Task<City> GetCityAsync(int cityId);
     }
 }

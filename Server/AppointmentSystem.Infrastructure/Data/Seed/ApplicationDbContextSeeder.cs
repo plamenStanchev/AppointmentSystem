@@ -28,7 +28,8 @@
                               new DepartmentSeeder(),
                               new UserSeed(),
                               new PatientSeeder(),
-                              new DepartmentSeeder()
+                              new DepartmentSeeder(),
+                              new DoctorSeeder()
                           };
 
             foreach (var seeder in seeders)

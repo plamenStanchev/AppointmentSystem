@@ -1,9 +1,11 @@
 ﻿namespace AppointmentSystem.Server.Extensions
 {
     using AppointmentSystem.Infrastructure.Data;
+    using AppointmentSystem.Mapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using System.Reflection;
 
     public static class ApplicationBuilderExtensions
     {
@@ -12,7 +14,7 @@
                .UseSwagger()
                .UseSwaggerUI(options =>
                {
-                   options.SwaggerEndpoint("/swagger/v1/swagger.json", "My AppointmentSystem Api");
+                   options.SwaggerEndpoint("/swagger/v1/swagger.json", "AppointmentSystemApi");
                    options.RoutePrefix = string.Empty;
                });
         public static void ApplyMigrations(this IApplicationBuilder app)
@@ -22,6 +24,10 @@
             var dbContext = services.ServiceProvider.GetService<ApplicationDbContext>();
 
             dbContext.Database.Migrate();
+        }
+        public static void AddMapperProfiles(this IApplicationBuilder app)
+        {
+            AutoMapperConfig.RegisterMappings(typeof(Startup).GetTypeInfo().Assembly);
         }
     }
 }

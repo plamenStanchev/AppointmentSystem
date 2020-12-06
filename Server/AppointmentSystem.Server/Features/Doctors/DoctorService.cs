@@ -54,10 +54,10 @@
             return true;
         }
 
-        public async Task<Result> DeleteDoctorAsync(int doctorId, string accountId)
+        public async Task<Result> DeleteDoctorAsync(string accountId)
         {
             var doctorResult = await this.repository.All()
-                .FirstOrDefaultAsync(d => d.Id == doctorId);
+                .FirstOrDefaultAsync(d => d.AccountId == accountId);
 
             if (doctorResult is null)
             {
@@ -80,11 +80,10 @@
             return true;
         }
 
-        public async Task<Doctor> GetDoctorAsync(int doctorId, string accoutId)
+        public async Task<Doctor> GetDoctorAsync(string accoutId)
          => await this.repository.All()
             .FirstOrDefaultAsync(
-             d => d.Id == doctorId
-            && d.AccountId == accoutId);
+             d => d.AccountId == accoutId);
 
         public async Task<IEnumerable<Doctor>> GetDoctorsInCity(int cityId)
         {
@@ -95,7 +94,7 @@
                   Doctor = new Doctor()
                   {
                       City = d.City,
-                      FistName = d.FistName,
+                      FirstName = d.FirstName,
                       SecondName = d.SecondName,
                       SurName = d.SurName,
                       Description = d.Description,
@@ -106,6 +105,6 @@
               }).ToListAsync();
 
             return doctorListObject.Select(d => d.Doctor).ToList();
-            }
+        }
     }
 }
