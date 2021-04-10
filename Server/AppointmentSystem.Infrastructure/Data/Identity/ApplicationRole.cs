@@ -3,6 +3,7 @@
     using AppointmentSystem.Core.Entities.Base;
     using Microsoft.AspNetCore.Identity;
     using System;
+
     public class ApplicationRole : IdentityRole<string>, IEntity
     {
         public ApplicationRole()

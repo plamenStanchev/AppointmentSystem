@@ -17,6 +17,7 @@
     {
         private readonly IPatientService patientService;
         private readonly IMapper mapper;
+
         public PatientController(
             IPatientService patientService,
             UserManager<ApplicationUser> userManager,
@@ -27,8 +28,7 @@
             this.mapper = mapper;
         }
 
-        [HttpPost]
-        [Route(nameof(Create))]
+        [HttpPost(nameof(Create))]
         public async Task<ActionResult<Result>> Create(PatientRequestModel patientModel)
         {
             var validatioResult = await base.ValidaiteAccountId(patientModel.AccountId);
@@ -41,9 +41,8 @@
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.PatientRoleName)]
-        [Route(nameof(Get))]
+        [HttpGet(nameof(Get))]
+        [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<PatientDetailsResponseModel>> Get(string accountId)
         {
             var validationResult = await base.ValidaiteAccountId(accountId);
@@ -64,10 +63,9 @@
             return this.Ok(patientDto);
         }
 
-        [HttpGet]
-        [Authorize(Roles =RolesNames.PatientRoleName)]
-        [Route(nameof(Delete))]
-        public async Task<ActionResult<Result>> Delete(string accountId) 
+        [HttpGet(nameof(Delete))]
+        [Authorize(Roles = RolesNames.Patient)]
+        public async Task<ActionResult<Result>> Delete(string accountId)
         {
             var validateResult = await base.ValidaiteAccountId(accountId);
             if (!validateResult)
@@ -76,13 +74,12 @@
             }
             var user = await this.userManager.GetUserAsync(this.User);
             var result = await this.patientService.DeletePatientAsync(accountId);
-            await base.userManager.RemoveFromRoleAsync(user, RolesNames.PatientRoleName);
+            await base.userManager.RemoveFromRoleAsync(user, RolesNames.Patient);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpPost]
-        [Authorize(Roles = RolesNames.PatientRoleName)]
-        [Route(nameof(Update))]
+        [HttpPost(nameof(Update))]
+        [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<Result>> Update(PatientRequestModel patientModel)
         {
             var validateResult = await base.ValidaiteAccountId(patientModel.AccountId);

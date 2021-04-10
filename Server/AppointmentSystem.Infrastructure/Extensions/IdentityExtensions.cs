@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using System.Security.Claims;
+
     public static class IdentityExtensions
     {
         public static string GetId(this ClaimsPrincipal user)
@@ -12,7 +13,7 @@
         public static string GetRole(this ClaimsPrincipal user)
            => user
                .Claims
-           .FirstOrDefault(u => u.Type == ClaimTypes.Role)
-           ?.Value;
+               .FirstOrDefault(u => u.Type == ClaimTypes.Role)
+               ?.Value;
     }
 }

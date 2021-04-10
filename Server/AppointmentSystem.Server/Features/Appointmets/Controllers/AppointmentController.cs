@@ -23,7 +23,7 @@
 
         public AppointmentController(
             IAppointmentService appointmentService,
-            IMapper mapper, 
+            IMapper mapper,
             UserManager<ApplicationUser> userManager)
         {
             this.appointmentService = appointmentService;
@@ -31,22 +31,20 @@
             this.userManager = userManager;
         }
 
-        [HttpGet]
-        [Route(nameof(GetPatientAppointmets))]
-        [Authorize(Roles = RolesNames.PatientRoleName)]
+        [HttpGet(nameof(GetPatientAppointmets))]
+        [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetPatientAppointmets(string accountId)
         {
             var patientAppointments = await this.appointmentService.GetPatientAppointAsync(accountId);
             var patientAppointmentDtos = patientAppointments
                 .Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
             patientAppointmentDtos.ForEach(a => a.Succeeded = true);
-               
+
             return patientAppointmentDtos;
         }
 
-        [HttpGet]
-        [Route(nameof(GetDoctorAppointmets))]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
+        [HttpGet(nameof(GetDoctorAppointmets))]
+        [Authorize(Roles = RolesNames.Doctor)]
         public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetDoctorAppointmets(string accountId)
         {
             var doctorAppointments = await this.appointmentService.GetDoctorsAppointmetsAsync(accountId);
@@ -56,9 +54,9 @@
 
             return doctorAppointmetDtos;
         }
-        [HttpPost]
-        [Route(nameof(Create))]
-        [Authorize(Roles =RolesNames.PatientRoleName)]
+
+        [HttpPost(nameof(Create))]
+        [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<Result>> Create(AppointmentRequestModel appointmentModel)
         {
             var appointmet = this.mapper.Map<Appointment>(appointmentModel);
@@ -67,9 +65,9 @@
             var result = await this.appointmentService.CreateAppointmentAsync(appointmet, accountId);
             return base.GenerateResultResponse(result);
         }
-        [HttpPost]
-        [Route(nameof(Update))]
-        [Authorize(Roles = RolesNames.PatientRoleName + ","+ RolesNames.DoctorRoleName)]
+
+        [HttpPost(nameof(Update))]
+        [Authorize(Roles = RolesNames.Patient + Comma + RolesNames.Doctor)]
         public async Task<ActionResult<Result>> Update(AppointmentRequestModel appointmentModel)
         {
             var appointmet = this.mapper.Map<Appointment>(appointmentModel);
@@ -78,14 +76,13 @@
 
             return base.GenerateResultResponse(result);
         }
-        [HttpPost]
-        [Route(nameof(Delete))]
-        [Authorize(Roles = RolesNames.DoctorRoleName + "," + RolesNames.PatientRoleName)]
-        public async Task<ActionResult<Result>> Delete(string accountId,int appointId)
+
+        [HttpPost(nameof(Delete))]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Patient)]
+        public async Task<ActionResult<Result>> Delete(string accountId, int appointId)
         {
             var result = await this.appointmentService.DeleteAppointmentAsync(appointId, accountId);
             return base.GenerateResultResponse(result);
         }
-
     }
 }

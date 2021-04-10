@@ -32,8 +32,7 @@
 
             if (roles.Count == 0)
             {
-                roleClaim = new Claim(ClaimTypes.Role, "");
-
+                roleClaim = new Claim(ClaimTypes.Role, string.Empty);
             }
             else
             {
@@ -53,6 +52,7 @@
                 (new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var encryptedToken = tokenHandler.WriteToken(token);
 

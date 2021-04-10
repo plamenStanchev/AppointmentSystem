@@ -31,9 +31,8 @@
             this.signInManager = signInManager;
         }
 
-        [HttpPost]
+        [HttpPost(nameof(Register))]
         [AllowAnonymous]
-        [Route(nameof(Register))]
         public async Task<ActionResult<LoginResponseModel>> Register([FromBody] RegisterRequestModel model)
         {
             var user = new ApplicationUser()
@@ -64,9 +63,8 @@
                 Role = string.Empty
             };
         }
-        [HttpPost]
+        [HttpPost(nameof(Login))]
         [AllowAnonymous]
-        [Route(nameof(Login))]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);

@@ -20,7 +20,7 @@
         public async Task<Result> CreateDepartmentAsync(Department department)
         {
             await this.repository.AddAsync(department);
-            var resuslt =  await this.repository.SaveChangesAsync();
+            var resuslt = await this.repository.SaveChangesAsync();
             if (resuslt == 0)
             {
                 return "Problem";
@@ -40,8 +40,8 @@
         }
 
         public async Task<Department> GetDepartmentAsync(int departmentId)
-        => await this.repository.All()
-            .FirstOrDefaultAsync(d => d.Id == departmentId);
+            => await this.repository.All()
+                .FirstOrDefaultAsync(d => d.Id == departmentId);
 
         public async Task<Result> UpdateDepartmentAsync(Department department)
         {

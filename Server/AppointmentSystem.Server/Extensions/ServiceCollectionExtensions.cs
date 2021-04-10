@@ -43,6 +43,7 @@
             services
                .AddDbContext<ApplicationDbContext>(options => options
                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
            => services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
                       .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
@@ -55,6 +56,7 @@
                       .AddTransient<IPatientService, PatientService>()
                       .AddTransient<IAppointmentService, AppointmentService>()
                       .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
+
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
@@ -78,12 +80,12 @@
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });
         public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
-        => services.AddAuthorization(optins =>
-        {
-            optins.FallbackPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-        });
+            => services.AddAuthorization(optins =>
+            {
+                optins.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            });
 
         public static IServiceCollection AddJwtAuthentication(
            this IServiceCollection services,

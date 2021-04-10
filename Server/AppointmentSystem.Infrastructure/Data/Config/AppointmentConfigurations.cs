@@ -3,6 +3,7 @@
     using AppointmentSystem.Core.Entities.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
     public class AppointmentConfigurations : IEntityTypeConfiguration<Appointment>
     {
         public void Configure(EntityTypeBuilder<Appointment> builder)

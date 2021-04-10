@@ -12,6 +12,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     //TODO : Move validation in difrent methods
     public class DoctorService : IDoctorService
     {
@@ -24,7 +25,7 @@
             this.repository = repository;
             this.userManager = userManager;
         }
-        
+
         public async Task<Result> CreateDoctorAsynch(Doctor doctor)
         {
             var user = await this.userManager.FindByIdAsync(doctor.AccountId);
@@ -44,7 +45,7 @@
             await this.repository.SaveChangesAsync();
 
             var result = await this.userManager
-                .AddToRoleAsync(user, RolesNames.DoctorRoleName);
+                .AddToRoleAsync(user, RolesNames.Doctor);
 
             if (!result.Succeeded)
             {
@@ -102,9 +103,11 @@
                   },
                   DepartmentName = d.Department.Name,
                   CityName = d.City.Name
-              }).ToListAsync();
+              })
+              .Select(d => d.Doctor)
+              .ToListAsync();
 
-            return doctorListObject.Select(d => d.Doctor).ToList();
+            return doctorListObject;
         }
     }
 }

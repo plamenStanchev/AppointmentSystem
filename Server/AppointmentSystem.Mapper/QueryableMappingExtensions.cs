@@ -5,30 +5,25 @@
     using System.Linq.Expressions;
 
     using AutoMapper.QueryableExtensions;
+
     public static class QueryableMappingExtensions
     {
         public static IQueryable<TDestination> To<TDestination>(
             this IQueryable source,
             params Expression<Func<TDestination, object>>[] membersToExpand)
-        {
-            if (source == null)
+            => source switch
             {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            return source.ProjectTo(AutoMapperConfig.MapperInstance.ConfigurationProvider, null, membersToExpand);
-        }
+                null => throw new ArgumentNullException(nameof(source)),
+                _ => source.ProjectTo(AutoMapperConfig.MapperInstance.ConfigurationProvider, null, membersToExpand)
+            };
 
         public static IQueryable<TDestination> To<TDestination>(
             this IQueryable source,
             object parameters)
-        {
-            if (source == null)
+            => source switch
             {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            return source.ProjectTo<TDestination>(AutoMapperConfig.MapperInstance.ConfigurationProvider, parameters);
-        }
+                null => throw new ArgumentNullException(nameof(source)),
+                _ => source.ProjectTo<TDestination>(AutoMapperConfig.MapperInstance.ConfigurationProvider, parameters)
+            };
     }
 }

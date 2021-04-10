@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     internal class CitySeeder : ISeeder
     {
-        public async Task SeedAsync(ApplicationDbContext dbContext,IServiceProvider serviceProvider)
+        public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
 
             if (dbContext == null)
@@ -17,14 +17,14 @@
             {
                 return;
             }
-            await this.SeedCitys(dbContext,"Burgas");
-            await this.SeedCitys(dbContext,"Sofia");
-            await this.SeedCitys(dbContext,"SomeShmukCity");
+            await this.SeedCitys(dbContext, "Burgas");
+            await this.SeedCitys(dbContext, "Sofia");
+            await this.SeedCitys(dbContext, "SomeShmukCity");
         }
 
-        private async Task SeedCitys(ApplicationDbContext dbContext,string name)
+        private async Task SeedCitys(ApplicationDbContext dbContext, string name)
         {
-           await dbContext.Cities.AddAsync(new City() { Name = name });
+            await dbContext.Cities.AddAsync(new City() { Name = name });
         }
     }
 }

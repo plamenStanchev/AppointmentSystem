@@ -3,6 +3,7 @@
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Mapper;
     using System.ComponentModel.DataAnnotations;
+
     public class DoctorRequsetModel : IMapTo<Doctor>
     {
         [Required]

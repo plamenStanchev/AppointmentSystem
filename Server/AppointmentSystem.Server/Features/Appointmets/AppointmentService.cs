@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     //TODO : Move validation in difrent methods
     public class AppointmentService : IAppointmentService
     {
@@ -26,6 +27,7 @@
             this.patientRepository = patientRepository;
             this.doctorRepository = doctorRepository;
         }
+
         //TODO Move Validation Out OF Method
         public async Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId)
         {
@@ -43,8 +45,8 @@
             {
                 return "Ther was a problem adding the the record";
             }
-            return true;
 
+            return true;
         }
 
         public async Task<Result> DeleteAppointmentAsync(int appointmentId, string doctorAccountId)
@@ -66,6 +68,7 @@
             {
                 return "Problem during deleting";
             }
+
             return true;
         }
 
@@ -75,7 +78,7 @@
                 .FirstOrDefaultAsync(d => d.AccountId == accountId);
             if (doctor is null)
             {
-                throw new ArgumentException(message:"Invalid AccountId");
+                throw new ArgumentException(message: "Invalid AccountId");
             }
             var appointmets = await this.appointmentRepository.All()
                 .Where(a => a.DoctorId == doctor.Id)
@@ -92,9 +95,11 @@
                     Patient = a.Patient.FirstName,
                     Department = a.Department.Name,
                     Doctor = a.Doctor.FirstName,
-                }).ToListAsync();
+                })
+                .Select(a => a.Appointment)
+                .ToListAsync();
 
-            return appointmets?.Select(a => a.Appointment);
+            return appointmets;
         }
 
         public async Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId)
@@ -102,7 +107,7 @@
             var patient = await this.patientRepository.All()
                 .FirstOrDefaultAsync(p => p.AccountId == accountId);
 
-            if (patient is  null)
+            if (patient is null)
             {
                 throw new ArgumentException(message: "Invalid AccountId");
             }
@@ -123,9 +128,11 @@
                         Patient = a.Patient.FirstName,
                         Department = a.Department.Name,
                         Doctor = a.Doctor.FirstName,
-                    }).ToListAsync();
+                    })
+                    .Select(a => a.Appointment)
+                    .ToListAsync();
 
-            return appointmets.Select(a => a.Appointment);
+            return appointmets;
         }
 
         public async Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId)

@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-
-namespace AppointmentSystem.Mapper
+﻿namespace AppointmentSystem.Mapper
 {
+    using AutoMapper;
+
     public interface IHaveCustomMappings
     {
         void CreateMappings(IProfileExpression configuration);

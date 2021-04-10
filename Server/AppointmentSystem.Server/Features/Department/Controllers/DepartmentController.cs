@@ -15,32 +15,29 @@
         private readonly IMapper mapepr;
 
         public DepartmentController(
-            IDepartmentService departmentService, 
+            IDepartmentService departmentService,
             IMapper mapepr)
         {
             this.departmentService = departmentService;
             this.mapepr = mapepr;
         }
 
-        [HttpPost]
-        [Route(nameof(Create))]
+        [HttpPost(nameof(Create))]
         public async Task<ActionResult<Result>> Create(DepartmentRequestModel departmentModel)
         {
             var department = this.mapepr.Map<Department>(departmentModel);
-            var result =  await this.departmentService.CreateDepartmentAsync(department);
+            var result = await this.departmentService.CreateDepartmentAsync(department);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Route(nameof(Delete))]
+        [HttpGet(nameof(Delete))]
         public async Task<ActionResult<Result>> Delete(int departmentId)
         {
             var result = await this.departmentService.DeleteDepartmentAsync(departmentId);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpPost]
-        [Route(nameof(Update))]
+        [HttpPost(nameof(Update))]
         public async Task<ActionResult<Result>> Update(DepartmentRequestModel departmentModel)
         {
             var department = this.mapepr.Map<Department>(departmentModel);
@@ -48,8 +45,7 @@
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Route(nameof(Get))]
+        [HttpGet(nameof(Get))]
         public async Task<ActionResult<DepartmentDetailsResponseModel>> Get(int departmentId)
         {
             var department = await this.departmentService.GetDepartmentAsync(departmentId);
