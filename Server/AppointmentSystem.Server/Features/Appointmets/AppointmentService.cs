@@ -19,10 +19,12 @@
 
         public AppointmentService(
             IDeletableEntityRepository<Appointment> appointmentRepository,
-            IDeletableEntityRepository<Patient> patientRepository)
+            IDeletableEntityRepository<Patient> patientRepository,
+            IDeletableEntityRepository<Doctor> doctorRepository)
         {
             this.appointmentRepository = appointmentRepository;
             this.patientRepository = patientRepository;
+            this.doctorRepository = doctorRepository;
         }
         //TODO Move Validation Out OF Method
         public async Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId)
