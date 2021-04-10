@@ -78,13 +78,14 @@
                         Version = "v1"
                     });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
+                    Type = SecuritySchemeType.Http,
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme."
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
