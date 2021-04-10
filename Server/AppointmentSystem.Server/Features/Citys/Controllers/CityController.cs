@@ -70,7 +70,8 @@
         public async Task<ActionResult<IEnumerable<CityDetailsResponseModel>>> All()
         {
             var cities = await this.cityService.GetAllCitiesAsync();
-            var citiesDto = cities.Select(c => this.mapper.Map<CityDetailsResponseModel>(c)).Select(c => c.Succeeded);
+            var citiesDto = cities.Select(c => this.mapper.Map<CityDetailsResponseModel>(c)).ToList();
+            citiesDto.ForEach(c => c.Succeeded = true);
             return this.Ok(citiesDto);
         }
     }

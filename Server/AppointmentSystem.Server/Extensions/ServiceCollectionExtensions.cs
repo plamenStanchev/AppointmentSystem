@@ -77,11 +77,41 @@
                         Title = "AppointmentSystem.Server",
                         Version = "v1"
                     });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });
+
         public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
             => services.AddAuthorization(optins =>
             {
+                // optins.AddPolicy("PublicPolicy", new AuthorizationPolicyBuilder()
+                //         .RequireAssertion(_ => true)
+                //         .Build());
+
                 optins.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
