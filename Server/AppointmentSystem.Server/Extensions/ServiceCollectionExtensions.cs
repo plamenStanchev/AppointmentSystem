@@ -125,10 +125,6 @@
         public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
             => services.AddAuthorization(optins =>
             {
-                // optins.AddPolicy("PublicPolicy", new AuthorizationPolicyBuilder()
-                //         .RequireAssertion(_ => true)
-                //         .Build());
-
                 optins.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
