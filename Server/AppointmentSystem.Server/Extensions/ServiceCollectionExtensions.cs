@@ -23,6 +23,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.SwaggerGen;
     using System.Linq;
     using System.Text;
 
@@ -67,6 +68,22 @@
 
             return services;
         }
+
+        public class CustomSwaggerFilter : IDocumentFilter
+        {
+            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+            {
+                var newPaths = new OpenApiPaths();
+                swaggerDoc
+                    .Paths
+                    .OrderByDescending(x => x.Key.Contains("Identity"))
+                    .ToList()
+                    .ForEach(x => newPaths.Add(x.Key, x.Value));
+
+                swaggerDoc.Paths = newPaths;
+            }
+        }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
             => services.AddSwaggerGen(c =>
             {
@@ -78,12 +95,10 @@
                         Version = "v1"
                     });
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
                     In = ParameterLocation.Header,
                 });
 
@@ -95,12 +110,14 @@
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id = JwtBearerDefaults.AuthenticationScheme
                             }
                         },
                         new string[] {}
                     }
                 });
+
+                c.DocumentFilter<CustomSwaggerFilter>();
 
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });

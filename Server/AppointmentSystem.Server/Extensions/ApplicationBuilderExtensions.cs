@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Swashbuckle.AspNetCore.SwaggerUI;
     using System.Reflection;
 
     public static class ApplicationBuilderExtensions
@@ -16,6 +17,7 @@
                {
                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "AppointmentSystemApi");
                    options.RoutePrefix = string.Empty;
+                   options.DocExpansion(DocExpansion.None);
                });
 
         public static void ApplyMigrations(this IApplicationBuilder app)
