@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data.Seed
 {
     using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -34,7 +35,7 @@
                 var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
                 if (!result.Succeeded)
                 {
-                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                    throw new Exception(string.Join(Environment.NewLine, result.GetError()));
                 }
             }
         }

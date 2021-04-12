@@ -6,6 +6,7 @@
     using AppointmentSystem.Infrastructure.Constants;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Infrastructure.Extensions;
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -49,7 +50,7 @@
 
             if (!result.Succeeded)
             {
-                return result.Errors.ToString();
+                return result.GetError();
             }
 
             return true;

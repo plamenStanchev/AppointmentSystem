@@ -11,12 +11,10 @@ namespace AppointmentSystem.Server.Features.BaseFeatures.Controllers
         protected const string Comma = ",";
 
         protected virtual ActionResult<Result> GenerateResultResponse(Result result)
-        {
-            if (result.Succeeded)
+            => result.Succeeded switch
             {
-                return this.Ok(result);
-            }
-            return this.BadRequest(result.Error);
-        }
+                true => this.Ok(result),
+                _ => this.BadRequest(result.Error)
+            };
     }
 }

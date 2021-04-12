@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using AppointmentSystem.Infrastructure.Extensions;
 
     //TODO : Move validation in difrent methods
     public class PatientService : IPatientService
@@ -46,7 +47,7 @@
 
             if (!result.Succeeded)
             {
-                return result.Errors.ToString();
+                return result.GetError();
             }
 
             return true;
