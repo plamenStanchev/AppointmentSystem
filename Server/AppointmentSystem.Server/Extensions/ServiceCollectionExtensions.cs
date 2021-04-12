@@ -42,21 +42,22 @@
              IConfiguration configuration)
             =>
             services
-               .AddDbContext<ApplicationDbContext>(options => options
-                   .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                .AddDbContext<ApplicationDbContext>(options => options
+                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-           => services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
-                      .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
-                      .AddTransient<ICurrentUserService, CurrentUserService>()
-                      .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
-                      .AddTransient<IUserService, UserService>()
-                      .AddTransient<ICityService, CityService>()
-                      .AddTransient<IDepartmentService, DepartmentService>()
-                      .AddTransient<IDoctorService, DoctorService>()
-                      .AddTransient<IPatientService, PatientService>()
-                      .AddTransient<IAppointmentService, AppointmentService>()
-                      .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
+            => services
+                .AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
+                .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
+                .AddTransient<ICurrentUserService, CurrentUserService>()
+                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<ICityService, CityService>()
+                .AddTransient<IDepartmentService, DepartmentService>()
+                .AddTransient<IDoctorService, DoctorService>()
+                .AddTransient<IPatientService, PatientService>()
+                .AddTransient<IAppointmentService, AppointmentService>()
+                .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
@@ -67,21 +68,6 @@
                 }).AddEntityFrameworkStores<ApplicationDbContext>();
 
             return services;
-        }
-
-        public class CustomSwaggerFilter : IDocumentFilter
-        {
-            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
-            {
-                var newPaths = new OpenApiPaths();
-                swaggerDoc
-                    .Paths
-                    .OrderByDescending(x => x.Key.Contains("Identity"))
-                    .ToList()
-                    .ForEach(x => newPaths.Add(x.Key, x.Value));
-
-                swaggerDoc.Paths = newPaths;
-            }
         }
 
         public static IServiceCollection AddSwagger(this IServiceCollection services)
@@ -117,10 +103,25 @@
                     }
                 });
 
-                c.DocumentFilter<CustomSwaggerFilter>();
+                c.DocumentFilter<CustomOrderControllerSwaggerFilter>();
 
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });
+
+        internal class CustomOrderControllerSwaggerFilter : IDocumentFilter
+        {
+            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+            {
+                var newPaths = new OpenApiPaths();
+                swaggerDoc
+                    .Paths
+                    .OrderByDescending(x => x.Key.Contains("Identity"))
+                    .ToList()
+                    .ForEach(x => newPaths.Add(x.Key, x.Value));
+
+                swaggerDoc.Paths = newPaths;
+            }
+        }
 
         public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
             => services.AddAuthorization(optins =>
@@ -130,9 +131,7 @@
                 .Build();
             });
 
-        public static IServiceCollection AddJwtAuthentication(
-           this IServiceCollection services,
-           AppSettings appSettings)
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, AppSettings appSettings)
         {
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 

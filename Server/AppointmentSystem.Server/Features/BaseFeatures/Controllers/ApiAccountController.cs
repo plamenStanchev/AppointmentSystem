@@ -3,6 +3,7 @@
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
+    
     public abstract class ApiAccountController : ApiController
     {
         protected readonly UserManager<ApplicationUser> userManager;

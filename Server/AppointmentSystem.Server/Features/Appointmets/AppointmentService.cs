@@ -96,10 +96,9 @@
                     Department = a.Department.Name,
                     Doctor = a.Doctor.FirstName,
                 })
-                .Select(a => a.Appointment)
                 .ToListAsync();
 
-            return appointmets;
+            return appointmets?.Select(a => a.Appointment);
         }
 
         public async Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId)
@@ -129,10 +128,9 @@
                         Department = a.Department.Name,
                         Doctor = a.Doctor.FirstName,
                     })
-                    .Select(a => a.Appointment)
                     .ToListAsync();
 
-            return appointmets;
+            return appointmets?.Select(a => a.Appointment);
         }
 
         public async Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId)

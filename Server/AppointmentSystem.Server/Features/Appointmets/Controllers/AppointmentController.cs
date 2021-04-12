@@ -38,6 +38,7 @@
             var patientAppointments = await this.appointmentService.GetPatientAppointAsync(accountId);
             var patientAppointmentDtos = patientAppointments
                 .Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
+
             patientAppointmentDtos.ForEach(a => a.Succeeded = true);
 
             return patientAppointmentDtos;

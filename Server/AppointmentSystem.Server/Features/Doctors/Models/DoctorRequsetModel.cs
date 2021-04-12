@@ -24,6 +24,7 @@
 
         [Required]
         public int CityId { get; set; }
+        
         [Required]
         public int DepartmentId { get; set; }
 

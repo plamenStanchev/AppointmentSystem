@@ -63,6 +63,7 @@
                 Role = string.Empty
             };
         }
+        
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)
