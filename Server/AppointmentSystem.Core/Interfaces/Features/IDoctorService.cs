@@ -7,7 +7,7 @@
 
     public interface IDoctorService
     {
-        public Task<Result> CreateDoctorAsynch(Doctor doctors);
+        public Task<Result> CreateDoctorAsync(Doctor doctors);
 
         public Task<Result> DeleteDoctorAsync(string accountId);
 

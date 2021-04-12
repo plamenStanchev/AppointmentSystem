@@ -57,7 +57,7 @@
                 return this.BadRequest("Problem with Authentication");
             }
             var doctor = this.mapper.Map<Doctor>(requsetModel);
-            var result = await this.doctorService.CreateDoctorAsynch(doctor);
+            var result = await this.doctorService.CreateDoctorAsync(doctor);
             return base.GenerateResultResponse(result);
         }
 

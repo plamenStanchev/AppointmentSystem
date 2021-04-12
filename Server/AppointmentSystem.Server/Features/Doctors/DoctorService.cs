@@ -27,33 +27,30 @@
             this.userManager = userManager;
         }
 
-        public async Task<Result> CreateDoctorAsynch(Doctor doctor)
+        public async Task<Result> CreateDoctorAsync(Doctor doctor)
         {
             var user = await this.userManager.FindByIdAsync(doctor.AccountId);
-            if (user == null)
+            if (user is null)
             {
                 return "this doctor account id dosent exist";
             }
-            var patientExists = await this.repository.All()
-                .AnyAsync(d => d.Id == doctor.Id);
+            var doctorExists = await this.GetDoctorAsync(doctor.AccountId);
 
-            if (patientExists)
+            if (doctorExists is not null)
             {
                 return "Doctor Exists";
             }
 
             await this.repository.AddAsync(doctor);
-            await this.repository.SaveChangesAsync();
 
             var result = await this.userManager
                 .AddToRoleAsync(user, RolesNames.Doctor);
 
-            if (!result.Succeeded)
+            return result.Succeeded switch
             {
-                return result.GetError();
-            }
-
-            return true;
+                true => await this.repository.SaveChangesAsync() != default,
+                _ => result.GetError()
+            };
         }
 
         public async Task<Result> DeleteDoctorAsync(string accountId)
@@ -69,23 +66,22 @@
             {
                 return "Couldnt Find AccountId In Db";
             }
+
             this.repository.Delete(doctorResult);
-            await this.repository.SaveChangesAsync();
-            return true;
+
+            return await this.repository.SaveChangesAsync() != default;
         }
 
         public async Task<Result> UpdateDoctorAsync(Doctor doctor)
         {
             this.repository.Update(doctor);
-            await this.repository.SaveChangesAsync();
 
-            return true;
+            return await this.repository.SaveChangesAsync() != default;
         }
 
         public async Task<Doctor> GetDoctorAsync(string accoutId)
-         => await this.repository.All()
-            .FirstOrDefaultAsync(
-             d => d.AccountId == accoutId);
+            => await this.repository.All()
+                .FirstOrDefaultAsync(d => d.AccountId == accoutId);
 
         public async Task<IEnumerable<Doctor>> GetDoctorsInCity(int cityId)
         {
@@ -105,10 +101,9 @@
                   DepartmentName = d.Department.Name,
                   CityName = d.City.Name
               })
-              .Select(d => d.Doctor)
               .ToListAsync();
 
-            return doctorListObject;
+            return doctorListObject?.Select(d => d.Doctor);
         }
     }
 }
