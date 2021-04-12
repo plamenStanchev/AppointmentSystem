@@ -36,10 +36,6 @@
 
             builder.Property(a => a.DepartmentId)
                 .IsRequired();
-
-            builder.Property(a => a.AppointmentStart)
-                .IsRequired();
-
         }
     }
 }
