@@ -32,7 +32,7 @@
         }
 
         [HttpGet(nameof(Get))]
-        [Authorize(Roles = RolesNames.Doctor)]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
         {
             var validationResult = await base.ValidaiteAccountId(accountId);
@@ -48,6 +48,7 @@
         }
 
         [HttpPost(nameof(Create))]
+        [Authorize(Roles = RolesNames.Admin)]
         public async Task<ActionResult<Result>> Create(DoctorRequsetModel requsetModel)
         {
             var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
@@ -61,7 +62,7 @@
         }
 
         [HttpGet(nameof(Update))]
-        [Authorize(Roles = RolesNames.Doctor)]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Update(DoctorRequsetModel requsetModel)
         {
 
@@ -76,7 +77,7 @@
         }
 
         [HttpGet(nameof(Delete))]
-        [Authorize(Roles = RolesNames.Doctor)]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Delete(string accountId)
         {
             var validationResult = await base.ValidaiteAccountId(accountId);
@@ -91,7 +92,7 @@
         }
 
         [HttpGet(nameof(GetInCity))]
-        [Authorize(Roles = RolesNames.Doctor + "," + RolesNames.Patient)]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Patient)]
         public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId)
         {
             var result = await this.doctorService.GetDoctorsInCity(cityId);
