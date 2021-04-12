@@ -87,23 +87,32 @@
         {
             var doctorListObject = await this.repository.All()
               .Where(d => d.CityId == cityId)
-              .Select(d => new
+              .Select(d => new Doctor()
               {
-                  Doctor = new Doctor()
-                  {
-                      City = d.City,
-                      FirstName = d.FirstName,
-                      SecondName = d.SecondName,
-                      SurName = d.SurName,
-                      Description = d.Description,
-                      Department = d.Department
-                  },
-                  DepartmentName = d.Department.Name,
-                  CityName = d.City.Name
+                  City = d.City,
+                  FirstName = d.FirstName,
+                  SecondName = d.SecondName,
+                  SurName = d.SurName,
+                  Description = d.Description,
+                  Department = d.Department
               })
               .ToListAsync();
 
-            return doctorListObject?.Select(d => d.Doctor);
+            // .Select(d => new
+            // {
+            //     Doctor = new Doctor()
+            //     {
+            //         City = d.City,
+            //         FirstName = d.FirstName,
+            //         SecondName = d.SecondName,
+            //         SurName = d.SurName,
+            //         Description = d.Description,
+            //         Department = d.Department
+            //     },
+            //     DepartmentName = d.Department.Name,
+            //     CityName = d.City.Name
+            // })
+            return doctorListObject;
         }
     }
 }

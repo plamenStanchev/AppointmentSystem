@@ -7,7 +7,6 @@
     using AppointmentSystem.Infrastructure.Services;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AppointmentSystem.Server.Features.Doctors.Models;
-    using AppointmentSystem.Infrastructure.Extensions;
 
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
@@ -91,11 +90,10 @@
         }
 
         [HttpGet(nameof(GetInCity))]
-        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Patient)]
         public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId)
         {
             var result = await this.doctorService.GetDoctorsInCity(cityId);
-            var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d));
+            var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
 
             dtoResult.ForEach(c => c.Succeeded = true);
 
