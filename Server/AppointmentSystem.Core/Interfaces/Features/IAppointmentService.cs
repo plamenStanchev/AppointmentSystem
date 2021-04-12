@@ -17,5 +17,7 @@
         public Task<IEnumerable<Appointment>> GetDoctorsAppointmetsAsync(string accountId);
 
         public Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId);
+
+        public Task<Appointment> GetAppointmentAsync(int appointmentId);
     }
 }

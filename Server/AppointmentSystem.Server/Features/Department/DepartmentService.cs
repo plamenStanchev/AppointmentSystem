@@ -8,7 +8,7 @@
     using AppointmentSystem.Core.Interfaces.Repository;
     using Microsoft.EntityFrameworkCore;
 
-    public class DepartmentService : IDepartmentService
+    internal class DepartmentService : IDepartmentService
     {
         private readonly IDeletableEntityRepository<Department> repository;
 
@@ -20,38 +20,35 @@
         public async Task<Result> CreateDepartmentAsync(Department department)
         {
             await this.repository.AddAsync(department);
-            var resuslt = await this.repository.SaveChangesAsync();
-            if (resuslt == 0)
-            {
-                return "Problem";
-            }
-            return true;
+
+            return await this.SaveChangesAsync();
         }
 
         public async Task<Result> DeleteDepartmentAsync(int departmentId)
         {
-            var department = new Department()
-            {
-                Id = departmentId
-            };
-            this.repository.Delete(department);
-            await this.repository.SaveChangesAsync();
-            return true;
+            var departmentResult = await this.GetDepartmentAsync(departmentId);
+
+            this.repository.Delete(departmentResult);
+
+            return await this.SaveChangesAsync();
+        }
+
+        public async Task<Result> UpdateDepartmentAsync(Department department)
+        {
+            this.repository.Update(department);
+
+            return await this.SaveChangesAsync();
         }
 
         public async Task<Department> GetDepartmentAsync(int departmentId)
             => await this.repository.All()
                 .FirstOrDefaultAsync(d => d.Id == departmentId);
 
-        public async Task<Result> UpdateDepartmentAsync(Department department)
-        {
-            this.repository.Update(department);
-            var result = await this.repository.SaveChangesAsync();
-            if (result == 0)
+        private async Task<Result> SaveChangesAsync()
+            => await this.repository.SaveChangesAsync() switch
             {
-                return "Problem";
-            }
-            return true;
-        }
+                0 => "Problem",
+                _ => true
+            };
     }
 }

@@ -79,7 +79,7 @@
         }
 
         [HttpPost(nameof(Delete))]
-        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Patient)]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Patient + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Delete(string accountId, int appointId)
         {
             var result = await this.appointmentService.DeleteAppointmentAsync(appointId, accountId);

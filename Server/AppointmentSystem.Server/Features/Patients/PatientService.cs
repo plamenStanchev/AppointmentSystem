@@ -13,7 +13,7 @@
     using AppointmentSystem.Infrastructure.Extensions;
 
     //TODO : Move validation in difrent methods
-    public class PatientService : IPatientService
+    internal class PatientService : IPatientService
     {
         private readonly IDeletableEntityRepository<Patient> repository;
         private readonly UserManager<ApplicationUser> userManager;

@@ -12,7 +12,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class UserService : IUserService
+    internal class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> userManager;
 

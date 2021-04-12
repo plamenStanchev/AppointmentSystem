@@ -15,7 +15,7 @@
     using System.Threading.Tasks;
 
     //TODO : Move validation in difrent methods
-    public class DoctorService : IDoctorService
+    internal class DoctorService : IDoctorService
     {
         private readonly IDeletableEntityRepository<Doctor> repository;
         private readonly UserManager<ApplicationUser> userManager;
