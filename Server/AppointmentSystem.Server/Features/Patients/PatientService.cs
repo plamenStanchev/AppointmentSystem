@@ -33,32 +33,28 @@
             {
                 return "this patients account id dosent exist";
             }
-            var patientExists = await this.repository.All()
-                .AnyAsync(p => p.AccountId == patient.AccountId);
+            var patientExists = await this.GetPatientAsync(patient.AccountId);
 
-            if (patientExists)
+            if (patientExists != null)
             {
-                return "patient Exists";
+                return "Patient exists";
             }
 
             await this.repository.AddAsync(patient);
+
             var result = await this.userManager
                 .AddToRoleAsync(user, RolesNames.Patient);
 
-            if (!result.Succeeded)
+            return result.Succeeded switch
             {
-                return result.GetError();
-            }
-
-            return true;
+                true => await this.repository.SaveChangesAsync() != default,
+                _ => result.GetError()
+            };
         }
 
         public async Task<Result> DeletePatientAsync(string accountId)
         {
-            var patientResult = await this.repository.All()
-                .FirstOrDefaultAsync(p => p.AccountId == accountId);
-
-            Result returntResult = new Result();
+            var patientResult = await this.GetPatientAsync(accountId);
 
             if (patientResult is null)
             {
@@ -70,9 +66,8 @@
             }
 
             this.repository.Delete(patientResult);
-            await this.repository.SaveChangesAsync();
 
-            return true;
+            return await this.repository.SaveChangesAsync() != default;
         }
 
         public async Task<Patient> GetPatientAsync(string accountId)
@@ -82,9 +77,8 @@
         public async Task<Result> UpdatePatientAsync(Patient patient)
         {
             this.repository.Update(patient);
-            await this.repository.SaveChangesAsync();
 
-            return true;
+            return await this.repository.SaveChangesAsync() != default;
         }
     }
 }

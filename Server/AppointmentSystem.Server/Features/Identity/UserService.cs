@@ -28,22 +28,18 @@
 
             var user = await userManager.FindByIdAsync(userId);
             var roles = await userManager.GetRolesAsync(user);
-            Claim roleClaim;
 
-            if (roles.Count == 0)
+            var roleClaim = roles.Count switch
             {
-                roleClaim = new Claim(ClaimTypes.Role, string.Empty);
-            }
-            else
-            {
-                roleClaim = new Claim(ClaimTypes.Role, roles.FirstOrDefault());
-            }
+                0 => new Claim(ClaimTypes.Role, string.Empty),
+                _ => new Claim(ClaimTypes.Role, roles.FirstOrDefault())
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email,user.Email ),
+                    new Claim(ClaimTypes.Email,user.Email),
                     new Claim(ClaimTypes.NameIdentifier,userId),
                     roleClaim
                 }),
