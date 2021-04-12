@@ -2,6 +2,7 @@
 {
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Extensions;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AppointmentSystem.Server.Features.Identity.Models;
 
@@ -41,10 +42,10 @@
                 UserName = model.UserName,
             };
 
-            var createUserresult = await userManager.CreateAsync(user, model.Password);
-            if (!createUserresult.Succeeded)
+            var createUserResult = await userManager.CreateAsync(user, model.Password);
+            if (!createUserResult.Succeeded)
             {
-                return BadRequest(createUserresult.Errors);
+                return BadRequest(createUserResult.GetError());
             }
 
             user = await userManager.FindByEmailAsync(model.Email);
@@ -63,7 +64,7 @@
                 Role = string.Empty
             };
         }
-        
+
         [HttpPost(nameof(Login))]
         [AllowAnonymous]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginRequestModel model)

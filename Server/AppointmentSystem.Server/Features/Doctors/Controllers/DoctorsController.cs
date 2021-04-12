@@ -51,7 +51,7 @@
         [Authorize(Roles = RolesNames.Admin)]
         public async Task<ActionResult<Result>> Create(DoctorRequsetModel requsetModel)
         {
-            var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
+            var validationResult = await base.ValidateExistAccount(requsetModel.AccountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");
@@ -65,7 +65,6 @@
         [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Update(DoctorRequsetModel requsetModel)
         {
-
             var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
             if (!validationResult)
             {
