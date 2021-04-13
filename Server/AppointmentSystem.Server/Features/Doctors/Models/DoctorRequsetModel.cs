@@ -3,6 +3,7 @@
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Mapper;
     using System.ComponentModel.DataAnnotations;
+
     public class DoctorRequsetModel : IMapTo<Doctor>
     {
         [Required]
@@ -23,6 +24,7 @@
 
         [Required]
         public int CityId { get; set; }
+        
         [Required]
         public int DepartmentId { get; set; }
 

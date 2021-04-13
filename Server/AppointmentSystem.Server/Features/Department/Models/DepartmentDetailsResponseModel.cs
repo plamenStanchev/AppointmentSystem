@@ -3,6 +3,7 @@
     using AppointmentSystem.Mapper;
     using AppointmentSystem.Server.Features.BaseFeatures.Models;
     using AppointmentSystem.Core.Entities.Models;
+
     public class DepartmentDetailsResponseModel : BaseResponseModel, IMapFrom<Department>
     {
         public string Name { get; set; }

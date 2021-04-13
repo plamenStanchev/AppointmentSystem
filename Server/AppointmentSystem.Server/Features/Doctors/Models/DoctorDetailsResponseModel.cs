@@ -5,7 +5,7 @@
     using AppointmentSystem.Server.Features.BaseFeatures.Models;
     using AutoMapper;
 
-    public class DoctorDetailsResponseModel : BaseResponseModel,IMapFrom<Doctor>, IHaveCustomMappings
+    public class DoctorDetailsResponseModel : BaseResponseModel, IMapFrom<Doctor>, IHaveCustomMappings
     {
         public string FirstName { get; set; }
 
@@ -25,7 +25,7 @@
         {
             configuration.CreateMap<Doctor, DoctorDetailsResponseModel>()
                 .ForMember(d => d.Department,
-                opt => opt.MapFrom(d => d.Department.Name));
+                    opt => opt.MapFrom(d => d.Department.Name));
         }
     }
 }

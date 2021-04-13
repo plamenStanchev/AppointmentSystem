@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Core.Entities.Base
 {
     using System;
+
     public interface IEntity
     {
         DateTime CreatedOn { get; set; }

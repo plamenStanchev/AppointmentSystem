@@ -23,6 +23,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+    using Swashbuckle.AspNetCore.SwaggerGen;
     using System.Linq;
     using System.Text;
 
@@ -41,20 +42,23 @@
              IConfiguration configuration)
             =>
             services
-               .AddDbContext<ApplicationDbContext>(options => options
-                   .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                .AddDbContext<ApplicationDbContext>(options => options
+                    .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-           => services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
-                      .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
-                      .AddTransient<ICurrentUserService, CurrentUserService>()
-                      .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
-                      .AddTransient<IUserService, UserService>()
-                      .AddTransient<ICityService, CityService>()
-                      .AddTransient<IDepartmentService, DepartmentService>()
-                      .AddTransient<IDoctorService, DoctorService>()
-                      .AddTransient<IPatientService, PatientService>()
-                      .AddTransient<IAppointmentService, AppointmentService>()
-                      .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
+            => services
+                .AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>))
+                .AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
+                .AddTransient<ICurrentUserService, CurrentUserService>()
+                .AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>))
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<ICityService, CityService>()
+                .AddTransient<IDepartmentService, DepartmentService>()
+                .AddTransient<IDoctorService, DoctorService>()
+                .AddTransient<IPatientService, PatientService>()
+                .AddTransient<IAppointmentService, AppointmentService>()
+                .AddTransient<IMapper>(a => AutoMapperConfig.MapperInstance);
+
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
@@ -65,6 +69,7 @@
 
             return services;
         }
+
         public static IServiceCollection AddSwagger(this IServiceCollection services)
             => services.AddSwaggerGen(c =>
             {
@@ -75,19 +80,58 @@
                         Title = "AppointmentSystem.Server",
                         Version = "v1"
                     });
+
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = JwtBearerDefaults.AuthenticationScheme,
+                    In = ParameterLocation.Header,
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = JwtBearerDefaults.AuthenticationScheme
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
+                c.DocumentFilter<CustomOrderControllerSwaggerFilter>();
+
                 c.ResolveConflictingActions(apiDescription => apiDescription.First());
             });
-        public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
-        => services.AddAuthorization(optins =>
-        {
-            optins.FallbackPolicy = new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .Build();
-        });
 
-        public static IServiceCollection AddJwtAuthentication(
-           this IServiceCollection services,
-           AppSettings appSettings)
+        internal class CustomOrderControllerSwaggerFilter : IDocumentFilter
+        {
+            public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+            {
+                var newPaths = new OpenApiPaths();
+                swaggerDoc
+                    .Paths
+                    .OrderByDescending(x => x.Key.Contains("Identity"))
+                    .ToList()
+                    .ForEach(x => newPaths.Add(x.Key, x.Value));
+
+                swaggerDoc.Paths = newPaths;
+            }
+        }
+
+        public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
+            => services.AddAuthorization(optins =>
+            {
+                optins.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            });
+
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, AppSettings appSettings)
         {
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
 

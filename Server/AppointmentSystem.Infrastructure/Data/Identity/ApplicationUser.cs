@@ -7,8 +7,6 @@
 
     public class ApplicationUser : IdentityUser<string>, IEntity
     {
-
-
         public ApplicationUser()
         {
             Id = Guid.NewGuid().ToString();

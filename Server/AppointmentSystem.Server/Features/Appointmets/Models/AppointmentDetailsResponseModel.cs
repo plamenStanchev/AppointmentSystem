@@ -5,6 +5,7 @@
     using AppointmentSystem.Server.Features.BaseFeatures.Models;
     using AutoMapper;
     using System;
+
     public class AppointmentDetailsResponseModel : BaseResponseModel, IMapFrom<Appointment>, IHaveCustomMappings
     {
         public int Id { get; set; }
@@ -15,7 +16,7 @@
 
         public int PatientId { get; set; }
 
-        public string  PatientName { get; set; }
+        public string PatientName { get; set; }
 
         public int DepartmentId { get; set; }
 
@@ -41,3 +42,4 @@
         }
     }
 }
+

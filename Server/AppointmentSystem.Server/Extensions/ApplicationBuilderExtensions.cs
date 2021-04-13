@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Swashbuckle.AspNetCore.SwaggerUI;
     using System.Reflection;
 
     public static class ApplicationBuilderExtensions
@@ -16,7 +17,9 @@
                {
                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "AppointmentSystemApi");
                    options.RoutePrefix = string.Empty;
+                   options.DocExpansion(DocExpansion.None);
                });
+
         public static void ApplyMigrations(this IApplicationBuilder app)
         {
             using var services = app.ApplicationServices.CreateScope();
@@ -25,9 +28,8 @@
 
             dbContext.Database.Migrate();
         }
+
         public static void AddMapperProfiles(this IApplicationBuilder app)
-        {
-            AutoMapperConfig.RegisterMappings(typeof(Startup).GetTypeInfo().Assembly);
-        }
+            => AutoMapperConfig.RegisterMappings(typeof(Startup).GetTypeInfo().Assembly);
     }
 }

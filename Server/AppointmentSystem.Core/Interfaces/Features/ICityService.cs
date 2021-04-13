@@ -4,6 +4,7 @@
     using AppointmentSystem.Infrastructure.Services;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     public interface ICityService
     {
         public Task<Result> CreateCityAsync(City city);

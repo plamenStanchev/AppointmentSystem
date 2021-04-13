@@ -32,13 +32,12 @@ namespace AppointmentSystem.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerUI();
             }
-            
+
             app.AddMapperProfiles();
 
             app.UseHttpsRedirection();
@@ -49,16 +48,12 @@ namespace AppointmentSystem.Server
                     options.AllowAnyOrigin();
                     options.AllowAnyMethod();
                     options.AllowAnyHeader();
-
                 });
 
             app.UseAuthentication()
                 .UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
             app.ApplyMigrations();
         }
     }

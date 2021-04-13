@@ -23,30 +23,28 @@
             this.mapper = mapper;
         }
 
-        [HttpPost]
-        [Route(nameof(CreateCity))]
-        public async Task<ActionResult<Result>> CreateCity(CityRequestModel cityModel)
+        [HttpPost(nameof(Create))]
+        public async Task<ActionResult<Result>> Create(CityRequestModel cityModel)
         {
             var city = this.mapper.Map<City>(cityModel);
             var result = await this.cityService.CreateCityAsync(city);
             return base.GenerateResultResponse(result);
         }
-        [HttpGet]
-        [Route(nameof(DeleteCity))]
-        public async Task<ActionResult<Result>> DeleteCity(int cityId)
+
+        [HttpGet(nameof(Delete))]
+        public async Task<ActionResult<Result>> Delete(int cityId)
         {
             var city = await this.cityService.GetCityAsync(cityId);
             if (city is null)
             {
-                return this.BadRequest("Invalid cityId");
+                return this.BadRequest($"Invalid {nameof(cityId)}");
             }
             var result = await this.cityService.DeleteCityAsync(city);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpPost]
-        [Route(nameof(UpdateCity))]
-        public async Task<ActionResult<Result>> UpdateCity(CityRequestModel cityModel,int cityId)
+        [HttpPost(nameof(Update))]
+        public async Task<ActionResult<Result>> Update(CityRequestModel cityModel, int cityId)
         {
             var city = this.mapper.Map<City>(cityModel);
             city.Id = cityId;
@@ -54,12 +52,11 @@
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Route(nameof(GetCity))]
-        public async Task<ActionResult<CityDetailsResponseModel>> GetCity(int cityId)
+        [HttpGet(nameof(Get))]
+        public async Task<ActionResult<CityDetailsResponseModel>> Get(int cityId)
         {
             var city = await this.cityService.GetCityAsync(cityId);
-            
+
             if (city is null)
             {
                 return this.BadRequest(new CityDetailsResponseModel() { ErrorMesage = "Ther isnt a city with this Id" });
@@ -69,12 +66,12 @@
             return this.Ok(cityDto);
         }
 
-        [HttpPost]
-        [Route(nameof(GetAllCities))]
-        public async Task<ActionResult<IEnumerable<CityDetailsResponseModel>>> GetAllCities()
+        [HttpPost(nameof(All))]
+        public async Task<ActionResult<IEnumerable<CityDetailsResponseModel>>> All()
         {
             var cities = await this.cityService.GetAllCitiesAsync();
-            var citiesDto = cities.Select(c => this.mapper.Map<CityDetailsResponseModel>(c)).Select(c => c.Succeeded);
+            var citiesDto = cities.Select(c => this.mapper.Map<CityDetailsResponseModel>(c)).ToList();
+            citiesDto.ForEach(c => c.Succeeded = true);
             return this.Ok(citiesDto);
         }
     }

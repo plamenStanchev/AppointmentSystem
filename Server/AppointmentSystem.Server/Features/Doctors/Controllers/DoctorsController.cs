@@ -7,6 +7,7 @@
     using AppointmentSystem.Infrastructure.Services;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AppointmentSystem.Server.Features.Doctors.Models;
+
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     public class DoctorsController : ApiAccountController
     {
         private readonly IDoctorService doctorService;
@@ -28,9 +30,8 @@
             this.mapper = mapper;
         }
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Get))]
+        [HttpGet(nameof(Get))]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
         {
             var validationResult = await base.ValidaiteAccountId(accountId);
@@ -45,26 +46,24 @@
             return this.Ok(doctorResponse);
         }
 
-        [HttpPost]
-        [Route(nameof(Create))]
+        [HttpPost(nameof(Create))]
+        [Authorize(Roles = RolesNames.Admin)]
         public async Task<ActionResult<Result>> Create(DoctorRequsetModel requsetModel)
         {
-            var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
+            var validationResult = await base.ValidateExistAccount(requsetModel.AccountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");
             }
             var doctor = this.mapper.Map<Doctor>(requsetModel);
-            var result = await this.doctorService.CreateDoctorAsynch(doctor);
+            var result = await this.doctorService.CreateDoctorAsync(doctor);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Update))]
+        [HttpGet(nameof(Update))]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Update(DoctorRequsetModel requsetModel)
         {
-
             var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
             if (!validationResult)
             {
@@ -75,12 +74,10 @@
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Delete))]
+        [HttpGet(nameof(Delete))]
+        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Delete(string accountId)
         {
-
             var validationResult = await base.ValidaiteAccountId(accountId);
             if (!validationResult)
             {
@@ -88,19 +85,18 @@
             }
             var result = await this.doctorService.DeleteDoctorAsync(accountId);
             var user = await base.userManager.GetUserAsync(this.User);
-            await base.userManager.RemoveFromRoleAsync(user, RolesNames.DoctorRoleName);
+            await base.userManager.RemoveFromRoleAsync(user, RolesNames.Doctor);
             return base.GenerateResultResponse(result);
         }
 
-        [HttpGet]
-        [Route(nameof(GetInCity))]
-        [Authorize(Roles = RolesNames.DoctorRoleName + "," + RolesNames.PatientRoleName)]
+        [HttpGet(nameof(GetInCity))]
         public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId)
         {
             var result = await this.doctorService.GetDoctorsInCity(cityId);
             var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
 
-                dtoResult.ForEach(c => c.Succeeded = true);
+            dtoResult.ForEach(c => c.Succeeded = true);
+
             return this.Ok(dtoResult);
         }
     }

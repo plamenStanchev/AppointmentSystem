@@ -5,6 +5,7 @@
 
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     public interface IAppointmentService
     {
         public Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId);
@@ -16,5 +17,7 @@
         public Task<IEnumerable<Appointment>> GetDoctorsAppointmetsAsync(string accountId);
 
         public Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId);
+
+        public Task<Appointment> GetAppointmentAsync(int appointmentId);
     }
 }

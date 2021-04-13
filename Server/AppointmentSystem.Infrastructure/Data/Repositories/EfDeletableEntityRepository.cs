@@ -7,6 +7,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {
@@ -28,6 +29,7 @@
             var getByIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);
             return this.AllWithDeleted().FirstOrDefaultAsync(getByIdPredicate);
         }
+
 
         public void HardDelete(TEntity entity) => base.Delete(entity);
 

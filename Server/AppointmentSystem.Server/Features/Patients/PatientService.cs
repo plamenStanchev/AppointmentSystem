@@ -10,11 +10,14 @@
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
+    using AppointmentSystem.Infrastructure.Extensions;
+
     //TODO : Move validation in difrent methods
-    public class PatientService : IPatientService
+    internal class PatientService : IPatientService
     {
         private readonly IDeletableEntityRepository<Patient> repository;
         private readonly UserManager<ApplicationUser> userManager;
+
         public PatientService(
             IDeletableEntityRepository<Patient> repository,
               UserManager<ApplicationUser> userManager)
@@ -30,34 +33,29 @@
             {
                 return "this patients account id dosent exist";
             }
-            var patientExists = await this.repository.All()
-                .AnyAsync(p => p.AccountId == patient.AccountId);
+            var patientExists = await this.GetPatientAsync(patient.AccountId);
 
-            if (patientExists)
+            if (patientExists != null)
             {
-                return "patient Exists";
+                return "Patient exists";
             }
 
             await this.repository.AddAsync(patient);
-            var result = await this.userManager
-                .AddToRoleAsync(user, RolesNames.PatientRoleName);
 
-            if (!result.Succeeded)
+            var result = await this.userManager
+                .AddToRoleAsync(user, RolesNames.Patient);
+
+            return result.Succeeded switch
             {
-                  return result.Errors.ToString();
-            }
-;
-            return true;
-            
+                true => await this.repository.SaveChangesAsync() != default,
+                _ => result.GetError()
+            };
         }
 
         public async Task<Result> DeletePatientAsync(string accountId)
         {
-            var patientResult = await this.repository
-                .All().FirstOrDefaultAsync(
-                p => p.AccountId == accountId);
-            
-            Result returntResult = new Result();
+            var patientResult = await this.GetPatientAsync(accountId);
+
             if (patientResult is null)
             {
                 return "Couldnt Find Patient In Db";
@@ -68,21 +66,19 @@
             }
 
             this.repository.Delete(patientResult);
-            await this.repository.SaveChangesAsync();
-            return true;
+
+            return await this.repository.SaveChangesAsync() != default;
         }
 
         public async Task<Patient> GetPatientAsync(string accountId)
-        => await this.repository.All()
-                .FirstOrDefaultAsync(
-                p => p.AccountId == accountId);
+            => await this.repository.All()
+                .FirstOrDefaultAsync(p => p.AccountId == accountId);
 
         public async Task<Result> UpdatePatientAsync(Patient patient)
         {
             this.repository.Update(patient);
-            await this.repository.SaveChangesAsync();
 
-            return true;
+            return await this.repository.SaveChangesAsync() != default;
         }
     }
 }
