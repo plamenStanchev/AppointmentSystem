@@ -5,31 +5,50 @@
     using AppointmentSystem.Infrastructure.Constants;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Server.Features.Appointmets.Hubs;
     using AppointmentSystem.Server.Features.Appointmets.Models;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.SignalR;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    public class MessagePost
+    {
+        public virtual string Message { get; set; }
+    }
 
     public class AppointmentController : ApiController
     {
         private readonly IAppointmentService appointmentService;
         private readonly IMapper mapper;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IHubContext<NotifyHub> hub;
 
         public AppointmentController(
             IAppointmentService appointmentService,
             IMapper mapper,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IHubContext<NotifyHub> hub)
         {
             this.appointmentService = appointmentService;
             this.mapper = mapper;
             this.userManager = userManager;
+            this.hub = hub;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(MessagePost messagePost)
+        {
+            // await this.hub.Clients.All.SendAsync("test", "The message '" + messagePost.Message + "' has been received");
+            await this.hub.Clients.All.SendAsync("rest", messagePost.Message);
+            return Ok();
+        }
+
 
         [HttpGet(nameof(GetPatientAppointmets))]
         [Authorize(Roles = RolesNames.Patient)]

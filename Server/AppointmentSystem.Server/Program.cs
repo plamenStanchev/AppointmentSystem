@@ -26,7 +26,6 @@ namespace AppointmentSystem.Server
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while seeding the database.");
                 }
-
             }
 
             host.Run();

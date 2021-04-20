@@ -6,6 +6,7 @@ namespace AppointmentSystem.Server
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using AppointmentSystem.Server.Extensions;
+    using AppointmentSystem.Server.Features.Appointmets.Hubs;
 
     public class Startup
     {
@@ -26,6 +27,7 @@ namespace AppointmentSystem.Server
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                 .AddApplicationServices()
                 .AddSwagger()
+                .AddedSignalR()
                 .AddControllers();
         }
 
@@ -45,15 +47,20 @@ namespace AppointmentSystem.Server
             app.UseRouting()
                 .UseCors(options =>
                 {
-                    options.AllowAnyOrigin();
-                    options.AllowAnyMethod();
-                    options.AllowAnyHeader();
+                    options.WithOrigins("http://localhost")
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
                 });
 
             app.UseAuthentication()
                 .UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotifyHub>("/notify");
+                endpoints.MapControllers();
+            });
             app.ApplyMigrations();
         }
     }
