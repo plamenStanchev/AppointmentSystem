@@ -1,5 +1,18 @@
 import { useState } from "react";
-import "./Login.css";
+import {
+  Avatar,
+  Button,
+  Checkbox,
+  Container,
+  CssBaseline,
+  FormControlLabel,
+  Grid,
+  Link,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import useStyles from "./Login.styles";
 import IdentityService from "./services/IdentityService";
 
 interface Props {
@@ -7,6 +20,8 @@ interface Props {
 }
 
 const Login = (props: Props) => {
+  const classes = useStyles();
+
   const { setToken } = props;
   const [email, setsetEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
@@ -21,25 +36,67 @@ const Login = (props: Props) => {
   };
 
   return (
-    <div className='login-wrapper'>
-      <h1>Please Log In</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <p>Username</p>
-          <input type='text' onChange={(e) => setsetEmail(e.target.value)} />
-        </label>
-        <label>
-          <p>Password</p>
-          <input
+    <Container component='main' maxWidth='xs'>
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component='h1' variant='h5'>
+          Sign in
+        </Typography>
+        <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            id='email'
+            label='Email Address'
+            name='email'
+            autoComplete='email'
+            autoFocus
+            onChange={(e) => setsetEmail(e.target.value)}
+          />
+          <TextField
+            variant='outlined'
+            margin='normal'
+            required
+            fullWidth
+            name='password'
+            label='Password'
             type='password'
+            id='password'
+            autoComplete='current-password'
             onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
-        <div>
-          <button type='submit'>Submit</button>
-        </div>
-      </form>
-    </div>
+          <FormControlLabel
+            control={<Checkbox value='remember' color='primary' />}
+            label='Remember me'
+          />
+          <Button
+            type='submit'
+            fullWidth
+            variant='contained'
+            color='primary'
+            className={classes.submit}>
+            Login
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href='#' variant='body2'>
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href='#' variant='body2'>
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+    </Container>
   );
 };
 
