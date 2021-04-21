@@ -3,14 +3,15 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "@material-ui/core";
 
 import NavBar from "./components/navbar/NavBar";
-import Login from "./components/identity/Login";
+import Identity from "./components/identity/Identity";
+
 import useToken from "./components/identity/hooks/useToken";
 
 const App: React.FC = () => {
   const { token, setToken } = useToken();
 
   if (!token) {
-    return <Login setToken={setToken} />;
+    return <Identity setToken={setToken} />;
   }
 
   return (

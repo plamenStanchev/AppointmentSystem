@@ -15,7 +15,6 @@ const IdentityService = {
       }
 
       loginModel = loginResponse.data;
-      // window.location.reload();
 
       return loginModel;
     } catch (e) {
