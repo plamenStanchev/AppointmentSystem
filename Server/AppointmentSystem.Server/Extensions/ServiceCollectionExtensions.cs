@@ -26,9 +26,17 @@
     using Swashbuckle.AspNetCore.SwaggerGen;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
 
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddedSignalR(this IServiceCollection services)
+        {
+            services.AddSignalR();
+
+            return services;
+        }
+
         public static AppSettings GetApplicationSettings(
             this IServiceCollection services,
             IConfiguration configuration)
@@ -151,6 +159,18 @@
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
                         ValidateAudience = false
+                    };
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            if (string.IsNullOrEmpty(accessToken) == false)
+                            {
+                                context.Token = accessToken;
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
