@@ -1,6 +1,7 @@
 import { Grid, TextField } from "@material-ui/core";
 import registerFormConfig from "./Register.config";
 import { useForm } from "react-hook-form";
+import IdentityService from "../services/IdentityService";
 
 interface Props {
   setToken(loginResponseModel: any): void;
@@ -13,7 +14,7 @@ const Regsiter = (props: Props) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (registerModel: any) => {
-    const token = "";
+    const token = await IdentityService.register(registerModel);
     setToken(token);
   };
 
