@@ -37,12 +37,11 @@ const Identity = (props: Props) => {
       variant='contained'
       color='primary'
       className={classes.submit}>
-      {getFormName()}
+      {getFormName}
     </Button>
   );
 
-  const getFormName = () =>
-    existAccount ? FormNames.register : FormNames.login;
+  const getFormName = existAccount ? FormNames.register : FormNames.login;
 
   return (
     <Container component='main' maxWidth='xs'>
@@ -52,7 +51,7 @@ const Identity = (props: Props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          {getFormName()}
+          {getFormName}
         </Typography>
         {existAccount ? (
           <Register
