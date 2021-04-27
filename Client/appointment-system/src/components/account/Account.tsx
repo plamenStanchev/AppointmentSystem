@@ -1,4 +1,4 @@
-// import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet";
 import { Box, Container, Grid } from "@material-ui/core";
 import AccountProfile from "./details/AccountProfile";
 import AccountProfileDetails from "./details/AccountProfileDetails";
@@ -17,9 +17,9 @@ const Account = () => {
   const classes = useStyles();
   return (
     <>
-      {/* <Helmet>
+      <Helmet>
         <title>Account | Material Kit</title>
-      </Helmet> */}
+      </Helmet>
       <Box className={classes.box}>
         <Container maxWidth='lg'>
           <Grid container spacing={3}>

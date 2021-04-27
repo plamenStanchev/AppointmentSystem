@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Menu,
   Badge,
@@ -6,8 +6,8 @@ import {
   Toolbar,
   MenuItem,
   InputBase,
-  IconButton,
   Typography,
+  IconButton,
   Link as MuiLink,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -25,11 +25,11 @@ interface Props {}
 
 const NavBar = (props: Props) => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [
     mobileMoreAnchorEl,
     setMobileMoreAnchorEl,
-  ] = React.useState<null | HTMLElement>(null);
+  ] = useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -166,7 +166,7 @@ const NavBar = (props: Props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {}
+      {renderMobileMenu}
       {renderMenu}
     </div>
   );
