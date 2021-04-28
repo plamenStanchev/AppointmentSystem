@@ -1,18 +1,18 @@
 import { useState } from "react";
-import Login from "./login/Login";
-import Register from "./register/Register";
 import {
-  Avatar,
   Button,
   Container,
   CssBaseline,
   FormControlLabel,
   Grid,
   Switch,
-  Typography,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+
+import Login from "./login/Login";
+import Register from "./register/Register";
+
 import useStyles from "./Identity.styles";
+import useIdentityVisual from "./Identity.visual";
 
 const FormNames = {
   login: "Login",
@@ -25,10 +25,21 @@ interface Props {
 
 const Identity = (props: Props) => {
   const classes = useStyles();
+  const { loadPaper, openRegister, openLogin } = useIdentityVisual();
 
   const { setToken } = props;
 
-  const [existAccount, setExistAccount] = useState(false);
+  const [existAccount, setExistAccount] = useState(true);
+
+  const changeForm = () => {
+    loadPaper();
+    if (existAccount) {
+      openRegister();
+    } else {
+      openLogin();
+    }
+    setTimeout(() => setExistAccount(!existAccount), 250);
+  };
 
   const getButtonForChildren = () => (
     <Button
@@ -46,42 +57,28 @@ const Identity = (props: Props) => {
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          {getFormName}
-        </Typography>
+      <div className={classes.paper} id='paper'>
         {existAccount ? (
-          <Register
-            setToken={setToken}
-            classesForm={classes.form}
-            button={getButtonForChildren()}
-          />
+          <Login setToken={setToken} button={getButtonForChildren()} />
         ) : (
-          <Login
-            setToken={setToken}
-            classesForm={classes.form}
-            button={getButtonForChildren()}
-          />
+          <Register setToken={setToken} button={getButtonForChildren()} />
         )}
-        <Grid container justify='flex-end'>
-          <Grid item>
-            <FormControlLabel
-              control={
-                <Switch
-                  size='small'
-                  checked={existAccount}
-                  onChange={() => setExistAccount(!existAccount)}
-                />
-              }
-              color='primary'
-              label="Don't have an account?"
-            />
-          </Grid>
-        </Grid>
       </div>
+      <Grid container justify='flex-end'>
+        <Grid item>
+          <FormControlLabel
+            control={
+              <Switch
+                size='small'
+                checked={existAccount}
+                onChange={changeForm}
+              />
+            }
+            color='primary'
+            label="Don't have an account?"
+          />
+        </Grid>
+      </Grid>
     </Container>
   );
 };

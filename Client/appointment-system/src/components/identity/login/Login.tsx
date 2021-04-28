@@ -1,17 +1,18 @@
-import { Grid, TextField } from "@material-ui/core";
+import { Avatar, Grid, TextField, Typography } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { useForm } from "react-hook-form";
 import useIdentity from "../hooks/useIdentity";
 import loginFormConfig from "./Login.config";
-import { useForm } from "react-hook-form";
+import useStyles from "./Login.styles";
 
 interface Props {
   setToken(loginResponseModel: any): void;
-  classesForm: string;
   button: any;
 }
 
 const Login = (props: Props) => {
-  const { setToken, classesForm, button } = props;
-
+  const classes = useStyles();
+  const { setToken, button } = props;
   const { register: registerForm, handleSubmit } = useForm();
   const { login } = useIdentity();
 
@@ -21,23 +22,29 @@ const Login = (props: Props) => {
   };
   return (
     <>
+      <Avatar className={classes.avatar}>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component='h1' variant='h5'>
+        Login
+      </Typography>
       <form
-        className={classesForm}
+        className={classes.form}
         noValidate
         onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          {loginFormConfig.map((f) => (
-            <Grid key={f.id} item xs={12}>
+          {loginFormConfig.map((field) => (
+            <Grid key={field.id} item xs={12}>
               <TextField
-                {...registerForm(f.id)}
+                {...registerForm(field.id)}
                 variant='outlined'
                 required
                 fullWidth
-                id={f.id}
-                label={f.label}
-                name={f.name}
-                autoComplete={f.autoComplete}
-                type={f.type}
+                id={field.id}
+                label={field.label}
+                name={field.name}
+                autoComplete={field.autoComplete}
+                type={field.type}
               />
             </Grid>
           ))}

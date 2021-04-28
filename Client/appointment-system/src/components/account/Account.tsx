@@ -23,8 +23,8 @@ const Account = () => {
 
   useEffect(() => {
     (async () => {
-      const testT = await getDoctor(accountId);
-      console.log(testT);
+      const doctor = await getDoctor(accountId);
+      console.log(doctor);
     })();
   });
 
