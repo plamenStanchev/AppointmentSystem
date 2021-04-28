@@ -59,10 +59,14 @@ const NavBar = (props: Props) => {
       id={menuId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}>
+      open={isMenuOpen}>
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem component={Link} to='/account' children={"Account"} />
+      <MenuItem
+        onClick={handleMenuClose}
+        component={Link}
+        to='/account'
+        children={"Account"}
+      />
     </Menu>
   );
 

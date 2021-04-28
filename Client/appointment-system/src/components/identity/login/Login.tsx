@@ -1,5 +1,5 @@
 import { Grid, TextField } from "@material-ui/core";
-import IdentityService from "../services/IdentityService";
+import useIdentity from "../hooks/useIdentity";
 import loginFormConfig from "./Login.config";
 import { useForm } from "react-hook-form";
 
@@ -12,10 +12,11 @@ interface Props {
 const Login = (props: Props) => {
   const { setToken, classesForm, button } = props;
 
-  const { register, handleSubmit } = useForm();
+  const { register: registerForm, handleSubmit } = useForm();
+  const { login } = useIdentity();
 
   const onSubmit = async (loginModel: LoginRequestModel) => {
-    const token = await IdentityService.login(loginModel);
+    const token = await login(loginModel);
     setToken(token);
   };
   return (
@@ -28,7 +29,7 @@ const Login = (props: Props) => {
           {loginFormConfig.map((f) => (
             <Grid key={f.id} item xs={12}>
               <TextField
-                {...register(f.id)}
+                {...registerForm(f.id)}
                 variant='outlined'
                 required
                 fullWidth

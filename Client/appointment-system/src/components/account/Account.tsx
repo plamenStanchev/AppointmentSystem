@@ -1,9 +1,11 @@
-import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 import { Box, Container, Grid } from "@material-ui/core";
 import AccountProfile from "./details/AccountProfile";
 import AccountProfileDetails from "./details/AccountProfileDetails";
+import useAccount from "./hooks/useAccount";
 
 import { makeStyles } from "@material-ui/core/styles";
+import useAccountDetails from "./hooks/useAccountDetails";
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -15,11 +17,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Account = () => {
   const classes = useStyles();
+  const { getDoctor } = useAccount();
+
+  const { accountId } = useAccountDetails();
+
+  useEffect(() => {
+    (async () => {
+      const testT = await getDoctor(accountId);
+      console.log(testT);
+    })();
+  });
+
   return (
     <>
-      <Helmet>
-        <title>Account | Material Kit</title>
-      </Helmet>
       <Box className={classes.box}>
         <Container maxWidth='lg'>
           <Grid container spacing={3}>

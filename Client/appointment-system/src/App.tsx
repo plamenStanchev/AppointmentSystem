@@ -6,7 +6,7 @@ import Account from "./components/account/Account";
 import NavBar from "./components/navbar/NavBar";
 import Identity from "./components/identity/Identity";
 
-import useToken from "./components/identity/hooks/useToken";
+import useToken from "./shared/hooks/useToken";
 
 import theme from "./theme/theme";
 

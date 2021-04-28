@@ -1,7 +1,7 @@
 import { Grid, TextField } from "@material-ui/core";
 import registerFormConfig from "./Register.config";
 import { useForm } from "react-hook-form";
-import IdentityService from "../services/IdentityService";
+import useIdentity from "../hooks/useIdentity";
 
 interface Props {
   setToken(loginResponseModel: any): void;
@@ -11,10 +11,11 @@ interface Props {
 
 const Regsiter = (props: Props) => {
   const { setToken, classesForm, button } = props;
-  const { register, handleSubmit } = useForm();
+  const { register: registerForm, handleSubmit } = useForm();
+  const { register } = useIdentity();
 
   const onSubmit = async (registerModel: any) => {
-    const token = await IdentityService.register(registerModel);
+    const token = await register(registerModel);
     setToken(token);
   };
 
@@ -28,7 +29,7 @@ const Regsiter = (props: Props) => {
           {registerFormConfig.map((f) => (
             <Grid key={f.id} item xs={12}>
               <TextField
-                {...register(f.id)}
+                {...registerForm(f.id)}
                 variant='outlined'
                 required
                 fullWidth
