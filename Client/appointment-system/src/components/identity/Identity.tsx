@@ -52,7 +52,7 @@ const Identity = (props: Props) => {
     </Button>
   );
 
-  const getFormName = existAccount ? FormNames.register : FormNames.login;
+  const getFormName = existAccount ? FormNames.login : FormNames.register;
 
   return (
     <Container component='main' maxWidth='xs'>
