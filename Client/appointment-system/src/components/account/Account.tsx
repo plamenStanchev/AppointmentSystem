@@ -26,7 +26,6 @@ const Account = () => {
   useEffect(() => {
     (async () => {
       const doctor = await getDoctor(accountId);
-      console.log(doctor);
     })();
   });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Grid,
@@ -13,6 +13,8 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useForm } from "react-hook-form";
+
+import useDepartment from "../../../../shared/hooks/useDepartment";
 
 import doctorFormConfig from "./Doctor.config";
 import useStyles from "./Doctor.styles";
@@ -33,6 +35,9 @@ interface CreateDoctorModel {
 const Doctor = (props: Props) => {
   const classes = useStyles();
   const { register: registerForm, handleSubmit } = useForm<CreateDoctorModel>();
+  const { getDepartment } = useDepartment();
+
+  let departments;
 
   //
   const [state, setState] = React.useState<{
@@ -43,6 +48,13 @@ const Doctor = (props: Props) => {
     city: "",
     name: "hai",
     department: "",
+  });
+
+  useEffect(() => {});
+  useEffect(() => {
+    (async () => {
+      departments = await getDepartment();
+    })();
   });
 
   const handleChange = (
@@ -83,7 +95,6 @@ const Doctor = (props: Props) => {
           const isLast = i === doctorFormConfig.length - 1;
           const isEven = i % 2 === 0;
           return isEven && isLast;
-          // return false;
         };
 
         return lastComponentIsInTheMiddle() ? (
@@ -130,7 +141,7 @@ const Doctor = (props: Props) => {
             label='Department'
             required
             inputProps={{
-              name: "city",
+              name: "department",
               id: "outlined-city",
             }}>
             <option aria-label='None' value='' />
