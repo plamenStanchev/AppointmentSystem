@@ -10,10 +10,18 @@ interface Props {
   button: any;
 }
 
+interface RegisterModel {
+  username: string;
+  email: string;
+  confirmEmail: string;
+  password: string;
+  confirmPassword: string;
+}
+
 const Regsiter = (props: Props) => {
   const classes = useStyles();
   const { setToken, button } = props;
-  const { register: registerForm, handleSubmit } = useForm();
+  const { register: registerForm, handleSubmit } = useForm<RegisterModel>();
   const { register } = useIdentity();
 
   const onSubmit = async (registerModel: any) => {
@@ -37,7 +45,7 @@ const Regsiter = (props: Props) => {
           {registerFormConfig.map((field) => (
             <Grid key={field.id} item xs={12}>
               <TextField
-                {...registerForm(field.id)}
+                {...registerForm(field.id as keyof RegisterModel)}
                 variant='outlined'
                 required
                 fullWidth

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Box, Container, Grid } from "@material-ui/core";
 import AccountProfile from "./details/AccountProfile";
 import AccountProfileDetails from "./details/AccountProfileDetails";
+import Doctor from "./create/doctor/Doctor";
+
 import useAccount from "./hooks/useAccount";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,6 +30,9 @@ const Account = () => {
     })();
   });
 
+  if (accountId) {
+    return <Doctor />;
+  }
   return (
     <>
       <Box className={classes.box}>

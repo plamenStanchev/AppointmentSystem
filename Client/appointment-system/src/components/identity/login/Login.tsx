@@ -5,6 +5,11 @@ import useIdentity from "../hooks/useIdentity";
 import loginFormConfig from "./Login.config";
 import useStyles from "./Login.styles";
 
+interface LoginModel {
+  email: string;
+  password: string;
+}
+
 interface Props {
   setToken(loginResponseModel: any): void;
   button: any;
@@ -13,7 +18,7 @@ interface Props {
 const Login = (props: Props) => {
   const classes = useStyles();
   const { setToken, button } = props;
-  const { register: registerForm, handleSubmit } = useForm();
+  const { register: registerForm, handleSubmit } = useForm<LoginModel>();
   const { login } = useIdentity();
 
   const onSubmit = async (loginModel: LoginRequestModel) => {
@@ -36,7 +41,7 @@ const Login = (props: Props) => {
           {loginFormConfig.map((field) => (
             <Grid key={field.id} item xs={12}>
               <TextField
-                {...registerForm(field.id)}
+                {...registerForm(field.id as keyof LoginModel)}
                 variant='outlined'
                 required
                 fullWidth

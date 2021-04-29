@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container, ThemeProvider } from "@material-ui/core";
-import Account from "./components/account/Account";
 
+import Account from "./components/account/Account";
 import NavBar from "./components/navbar/NavBar";
 import Identity from "./components/identity/Identity";
 

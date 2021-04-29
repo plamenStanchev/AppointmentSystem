@@ -41,13 +41,13 @@ const Identity = (props: Props) => {
     setTimeout(() => setExistAccount(!existAccount), 250);
   };
 
-  const getButtonForChildren = () => (
+  const buttonForChildren = () => (
     <Button
+      className={classes.submit}
       type='submit'
-      fullWidth
       variant='contained'
       color='primary'
-      className={classes.submit}>
+      fullWidth>
       {getFormName}
     </Button>
   );
@@ -59,9 +59,9 @@ const Identity = (props: Props) => {
       <CssBaseline />
       <div className={classes.paper} id='paper'>
         {existAccount ? (
-          <Login setToken={setToken} button={getButtonForChildren()} />
+          <Login setToken={setToken} button={buttonForChildren()} />
         ) : (
-          <Register setToken={setToken} button={getButtonForChildren()} />
+          <Register setToken={setToken} button={buttonForChildren()} />
         )}
       </div>
       <Grid container justify='flex-end'>
