@@ -5,11 +5,11 @@ const baseUrl = "/department";
 const useDepartment = () => {
   const { get } = useApi();
 
-  const getDepartment = async () => {
+  const getAllDepartments = async () => {
     try {
       let demartpmetModel;
 
-      const departmentResponse = await get(`${baseUrl}/get`);
+      const departmentResponse = await get(`${baseUrl}/all`);
 
       if (!departmentResponse) {
         throw new Error("Unknown error");
@@ -22,7 +22,7 @@ const useDepartment = () => {
       throw e;
     }
   };
-  return { getDepartment };
+  return { getAllDepartments };
 };
 
 export default useDepartment;
