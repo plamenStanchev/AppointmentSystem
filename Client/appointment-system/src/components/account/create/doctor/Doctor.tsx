@@ -10,16 +10,22 @@ import {
   InputLabel,
   Typography,
   FormControl,
+  MenuItem,
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import useDepartment from "../../../../shared/hooks/useDepartment";
+import useCity from "../../../../shared/hooks/useCity";
 
 import doctorFormConfig from "./Doctor.config";
 import useStyles from "./Doctor.styles";
+import useWindowDimensions from "../../../../shared/hooks/useWindowDimensions";
 
-interface Props {}
+interface OptionsModel {
+  name: string;
+  id: number;
+}
 
 interface CreateDoctorModel {
   firstName: string;
@@ -28,52 +34,43 @@ interface CreateDoctorModel {
   pin: string;
   description: string;
   cityId: number;
-  departmentId: number;
+  departmentId: string;
   accountId: string;
 }
 
+interface Props {}
+
 const Doctor = (props: Props) => {
   const classes = useStyles();
-  const { register: registerForm, handleSubmit } = useForm<CreateDoctorModel>();
-  const { getDepartment } = useDepartment();
+  const {
+    register: registerForm,
+    handleSubmit,
+    control,
+  } = useForm<CreateDoctorModel>();
+  const { getAllDepartments } = useDepartment();
+  const { getAllCities } = useCity();
+  const { width } = useWindowDimensions();
 
-  let departments;
+  const [departments, setDepartments] = useState<OptionsModel[]>([]);
+  const [cities, setCities] = useState<OptionsModel[]>([]);
 
-  //
-  const [state, setState] = React.useState<{
-    city: string | number;
-    name: string;
-    department: string;
-  }>({
-    city: "",
-    name: "hai",
-    department: "",
-  });
-
-  useEffect(() => {});
   useEffect(() => {
     (async () => {
-      departments = await getDepartment();
-    })();
-  });
+      const responseDepartments = (await getAllDepartments()) as OptionsModel[];
+      setDepartments(responseDepartments);
 
-  const handleChange = (
-    event: React.ChangeEvent<{ name?: string; value: unknown }>
-  ) => {
-    const name = event.target.name as keyof typeof state;
-    setState({
-      ...state,
-      [name]: event.target.value,
-    });
-  };
-  //
+      const responseCities = (await getAllCities()) as OptionsModel[];
+      setCities(responseCities);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (registerModel: any) => {
     console.log("log");
   };
 
   const renderFormFields = (
-    <Grid container spacing={2}>
+    <Grid key={"t1"} container spacing={2}>
       {doctorFormConfig.map((field, i) => {
         const fieldComponent = (
           <Grid key={field.id} item md={6} xs={12}>
@@ -97,58 +94,70 @@ const Doctor = (props: Props) => {
           return isEven && isLast;
         };
 
+        const isHidden = width < 960;
+
         return lastComponentIsInTheMiddle() ? (
           <>
-            <Grid md={3} />
+            <Grid key='temp1' item md={3} hidden={isHidden} />
             {fieldComponent}
-            <Grid md={3} />
+            <Grid key='temp2' item md={3} hidden={isHidden} />
           </>
         ) : (
           fieldComponent
         );
       })}
-      <Grid item md={6} xs={12}>
+      <Grid key={"department"} item md={6} xs={12}>
         <FormControl variant='outlined' className={classes.formControl}>
           <InputLabel required htmlFor='outlined-city'>
-            City
-          </InputLabel>
-          <Select
-            native
-            value={state.city}
-            onChange={handleChange}
-            label='City'
-            required
-            inputProps={{
-              name: "city",
-              id: "outlined-city",
-            }}>
-            <option aria-label='None' value='' />
-            <option value={10}>Burgas</option>
-            <option value={20}>Varna</option>
-            <option value={30}>Sofia</option>
-          </Select>
-        </FormControl>
-      </Grid>
-      <Grid item md={6} xs={12}>
-        <FormControl variant='outlined' className={classes.formControl}>
-          <InputLabel required htmlFor='outlined-department'>
             Department
           </InputLabel>
-          <Select
-            native
-            value={state.city}
-            onChange={handleChange}
-            label='Department'
-            required
-            inputProps={{
-              name: "department",
-              id: "outlined-city",
-            }}>
-            <option aria-label='None' value='' />
-            <option value={10}>Burgas</option>
-            <option value={20}>Varna</option>
-            <option value={30}>Sofia</option>
-          </Select>
+          <Controller
+            name='departmentId'
+            control={control}
+            render={({ field }) => {
+              const { onChange, value } = field;
+              return (
+                <Select
+                  value={value}
+                  onChange={onChange}
+                  required
+                  label='Department'>
+                  <MenuItem aria-label='None' value='' />
+                  {departments.map((d) => (
+                    <MenuItem key={d.id} value={d.id}>
+                      {d.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              );
+            }}
+            defaultValue=''
+          />
+        </FormControl>
+      </Grid>
+      <Grid key={"city"} item md={6} xs={12}>
+        <FormControl variant='outlined' className={classes.formControl}>
+          <InputLabel required htmlFor='outlined-department'>
+            City
+          </InputLabel>
+          <Controller
+            name='cityId'
+            control={control}
+            render={({ field }) => {
+              const { onChange, value } = field;
+              return (
+                <Select value={value} onChange={onChange} required label='City'>
+                  <MenuItem aria-label='None' value='' />
+                  {cities.map((d) => (
+                    <MenuItem key={d.id} value={d.id}>
+                      {d.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              );
+            }}
+            defaultValue=''
+          />
         </FormControl>
       </Grid>
     </Grid>
@@ -167,9 +176,9 @@ const Doctor = (props: Props) => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}>
         {renderFormFields}
-        <Grid container spacing={1}>
-          <Grid md={5} xs={5} />
-          <Grid item md={2} xs={2}>
+        <Grid key={"t2"} container spacing={2}>
+          <Grid key='temp11' item md={5} xs={5} />
+          <Grid key='temp12' item md={2} xs={2}>
             <Button
               className={classes.submit}
               type='submit'
@@ -180,7 +189,7 @@ const Doctor = (props: Props) => {
               Submit
             </Button>
           </Grid>
-          <Grid md={5} xs={5} />
+          <Grid key='temp13' item md={5} xs={5} />
         </Grid>
       </form>
     </Container>
