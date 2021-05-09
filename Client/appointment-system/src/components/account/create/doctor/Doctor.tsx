@@ -17,23 +17,24 @@ import { Controller, useForm } from "react-hook-form";
 
 import useDepartment from "../../../../shared/hooks/useDepartment";
 import useCity from "../../../../shared/hooks/useCity";
+import useAccountDetails from "../../hooks/useAccountDetails";
 
-import doctorFormConfig from "./Doctor.config";
+import useDoctorConfig from "./useDoctorConfig";
+
 import useStyles from "./Doctor.styles";
-import useWindowDimensions from "../../../../shared/hooks/useWindowDimensions";
+import useDoctor from "../../hooks/useDoctor";
 
 interface OptionsModel {
   name: string;
   id: number;
 }
-
-interface CreateDoctorModel {
+interface ICreateDoctorModel {
   firstName: string;
   secondName: string;
   surName: string;
   pin: string;
   description: string;
-  cityId: number;
+  cityId: string;
   departmentId: string;
   accountId: string;
 }
@@ -42,14 +43,19 @@ interface Props {}
 
 const Doctor = (props: Props) => {
   const classes = useStyles();
+
   const {
     register: registerForm,
     handleSubmit,
     control,
-  } = useForm<CreateDoctorModel>();
+  } = useForm<ICreateDoctorModel>();
+
+  const { doctorFormConfig } = useDoctorConfig();
+
+  const { accountId } = useAccountDetails();
   const { getAllDepartments } = useDepartment();
   const { getAllCities } = useCity();
-  const { width } = useWindowDimensions();
+  const { createDoctor } = useDoctor();
 
   const [departments, setDepartments] = useState<OptionsModel[]>([]);
   const [cities, setCities] = useState<OptionsModel[]>([]);
@@ -65,47 +71,32 @@ const Doctor = (props: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = async (registerModel: any) => {
+  const onSubmit = async (registerModel: ICreateDoctorModel) => {
+    if (accountId) {
+      registerModel.accountId = accountId;
+
+      var response = await createDoctor(registerModel);
+    }
     console.log("log");
   };
 
   const renderFormFields = (
-    <Grid key={"t1"} container spacing={2}>
-      {doctorFormConfig.map((field, i) => {
-        const fieldComponent = (
-          <Grid key={field.id} item md={6} xs={12}>
-            <TextField
-              {...registerForm(field.name as keyof CreateDoctorModel)}
-              variant='outlined'
-              required
-              fullWidth
-              id={field.id}
-              label={field.label}
-              name={field.name}
-              autoComplete={field.autoComplete}
-              type={field.type}
-            />
-          </Grid>
-        );
-
-        const lastComponentIsInTheMiddle = () => {
-          const isLast = i === doctorFormConfig.length - 1;
-          const isEven = i % 2 === 0;
-          return isEven && isLast;
-        };
-
-        const isHidden = width < 960;
-
-        return lastComponentIsInTheMiddle() ? (
-          <>
-            <Grid key='temp1' item md={3} hidden={isHidden} />
-            {fieldComponent}
-            <Grid key='temp2' item md={3} hidden={isHidden} />
-          </>
-        ) : (
-          fieldComponent
-        );
-      })}
+    <Grid container spacing={2}>
+      {doctorFormConfig.map((field) => (
+        <Grid key={field.id} item md={12} xs={12}>
+          <TextField
+            {...registerForm(field.name as keyof ICreateDoctorModel)}
+            variant='outlined'
+            required
+            fullWidth
+            id={field.id}
+            label={field.label}
+            name={field.name}
+            autoComplete={field.autoComplete}
+            type={field.type}
+          />
+        </Grid>
+      ))}
       <Grid key={"department"} item md={6} xs={12}>
         <FormControl variant='outlined' className={classes.formControl}>
           <InputLabel required htmlFor='outlined-city'>
@@ -176,9 +167,9 @@ const Doctor = (props: Props) => {
         noValidate
         onSubmit={handleSubmit(onSubmit)}>
         {renderFormFields}
-        <Grid key={"t2"} container spacing={2}>
-          <Grid key='temp11' item md={5} xs={5} />
-          <Grid key='temp12' item md={2} xs={2}>
+        <Grid container spacing={2}>
+          <Grid item md={5} xs={5} />
+          <Grid item md={2} xs={2}>
             <Button
               className={classes.submit}
               type='submit'
@@ -189,7 +180,7 @@ const Doctor = (props: Props) => {
               Submit
             </Button>
           </Grid>
-          <Grid key='temp13' item md={5} xs={5} />
+          <Grid item md={5} xs={5} />
         </Grid>
       </form>
     </Container>

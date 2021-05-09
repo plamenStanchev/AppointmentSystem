@@ -1,13 +1,13 @@
 import useApi from "../../../shared/hooks/useApi";
 
-interface CreateDoctorModel {
+interface ICreateDoctorModel {
   firstName: string;
   secondName: string;
   surName: string;
   pin: string;
-  cityId: number;
-  departmentId: number;
   description: string;
+  cityId: string;
+  departmentId: string;
   accountId: string;
 }
 
@@ -16,7 +16,7 @@ const baseUrl = "/doctors";
 const useDoctor = () => {
   const { get, post } = useApi();
 
-  const createDoctor = async (model: CreateDoctorModel) => {
+  const createDoctor = async (model: ICreateDoctorModel) => {
     try {
       let doctorModel;
       const doctorResponse = await post(`${baseUrl}/create`, model);
