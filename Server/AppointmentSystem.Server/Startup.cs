@@ -6,7 +6,7 @@ namespace AppointmentSystem.Server
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using AppointmentSystem.Server.Extensions;
-    using AppointmentSystem.Server.Features.Appointmets.Hubs;
+    using AppointmentSystem.Server.Features.Appointments.Hubs;
 
     public class Startup
     {

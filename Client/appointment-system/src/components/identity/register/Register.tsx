@@ -18,7 +18,7 @@ interface RegisterModel {
   confirmPassword: string;
 }
 
-const Regsiter = (props: Props) => {
+const Register = (props: Props) => {
   const classes = useStyles();
   const { setToken, button } = props;
   const { register: registerForm, handleSubmit } = useForm<RegisterModel>();
@@ -64,4 +64,4 @@ const Regsiter = (props: Props) => {
   );
 };
 
-export default Regsiter;
+export default Register;

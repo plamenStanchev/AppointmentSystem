@@ -1,9 +1,9 @@
-﻿namespace AppointmentSystem.Server.Features.Citys.Controllers
+﻿namespace AppointmentSystem.Server.Features.Cities.Controllers
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Infrastructure.Services;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
-    using AppointmentSystem.Server.Features.Citys.Models;
+    using AppointmentSystem.Server.Features.Cities.Models;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using System.Collections.Generic;
@@ -59,7 +59,7 @@
 
             if (city is null)
             {
-                return this.BadRequest(new CityDetailsResponseModel() { ErrorMesage = "Ther isn't a city with this Id" });
+                return this.BadRequest(new CityDetailsResponseModel() { ErrorMesage = "There isn't a city with this Id" });
             }
             var cityDto = this.mapper.Map<CityDetailsResponseModel>(city);
             cityDto.Succeeded = true;

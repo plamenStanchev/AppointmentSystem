@@ -7,7 +7,7 @@ const useDepartment = () => {
 
   const getAllDepartments = async () => {
     try {
-      let demartpmetModel;
+      let departmentModel;
 
       const departmentResponse = await get(`${baseUrl}/all`);
 
@@ -15,13 +15,14 @@ const useDepartment = () => {
         throw new Error("Unknown error");
       }
 
-      demartpmetModel = departmentResponse.data;
+      departmentModel = departmentResponse.data;
 
-      return demartpmetModel;
+      return departmentModel;
     } catch (e) {
       throw e;
     }
   };
+
   return { getAllDepartments };
 };
 

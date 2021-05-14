@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Server.Features.Citys
+﻿namespace AppointmentSystem.Server.Features.Cities
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Infrastructure.Services;

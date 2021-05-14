@@ -31,10 +31,9 @@
         }
 
         [HttpGet(nameof(Get))]
-        [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
         {
-            var validationResult = await base.ValidaiteAccountId(accountId);
+            var validationResult = await base.ValidateAccountId(accountId);
             if (!validationResult)
             {
                 return this.BadRequest(new DoctorDetailsResponseModel()
@@ -47,29 +46,28 @@
         }
 
         [HttpPost(nameof(Create))]
-        [Authorize(Roles = RolesNames.Admin)]
-        public async Task<ActionResult<Result>> Create(DoctorRequsetModel requsetModel)
+        public async Task<ActionResult<Result>> Create(DoctorRequestModel requestModel)
         {
-            var validationResult = await base.ValidateExistAccount(requsetModel.AccountId);
+            var validationResult = await base.ValidateExistAccount(requestModel.AccountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");
             }
-            var doctor = this.mapper.Map<Doctor>(requsetModel);
+            var doctor = this.mapper.Map<Doctor>(requestModel);
             var result = await this.doctorService.CreateDoctorAsync(doctor);
             return base.GenerateResultResponse(result);
         }
 
         [HttpGet(nameof(Update))]
         [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
-        public async Task<ActionResult<Result>> Update(DoctorRequsetModel requsetModel)
+        public async Task<ActionResult<Result>> Update(DoctorRequestModel requestModel)
         {
-            var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
+            var validationResult = await base.ValidateAccountId(requestModel.AccountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");
             }
-            var doctor = this.mapper.Map<Doctor>(requsetModel);
+            var doctor = this.mapper.Map<Doctor>(requestModel);
             var result = await this.doctorService.UpdateDoctorAsync(doctor);
             return base.GenerateResultResponse(result);
         }
@@ -78,7 +76,7 @@
         [Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
         public async Task<ActionResult<Result>> Delete(string accountId)
         {
-            var validationResult = await base.ValidaiteAccountId(accountId);
+            var validationResult = await base.ValidateAccountId(accountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");

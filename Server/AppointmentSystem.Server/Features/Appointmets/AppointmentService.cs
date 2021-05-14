@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Server.Features.Appointmets
+﻿namespace AppointmentSystem.Server.Features.Appointments
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Features;
@@ -11,7 +11,7 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    //TODO : Move validation in difrent methods
+    //TODO : Move validation in different methods
     internal class AppointmentService : IAppointmentService
     {
         private readonly IDeletableEntityRepository<Appointment> appointmentRepository;
@@ -33,9 +33,9 @@
         //TODO Move Validation Out OF Method
         public async Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId)
         {
-            var patientChek = await this.patientService.GetPatientAsync(patientAccountId);
+            var patientCheck = await this.patientService.GetPatientAsync(patientAccountId);
 
-            if (patientChek?.Id != appointment.PatientId || patientChek is null)
+            if (patientCheck?.Id != appointment.PatientId || patientCheck is null)
             {
                 return "Problem with Patient";
             }
@@ -44,7 +44,7 @@
 
             return await this.appointmentRepository.SaveChangesAsync() switch
             {
-                0 => "Ther was a problem adding the the record",
+                0 => "There was a problem adding the the record",
                 _ => true
             };
         }
@@ -57,7 +57,7 @@
 
             if (doctor?.Id != appointment?.DoctorId || appointment is null || doctor is null) // ??
             {
-                return "you dont have premision";
+                return "you don't have permission";
             }
 
             this.appointmentRepository.Delete(appointment);
@@ -69,7 +69,7 @@
             };
         }
 
-        public async Task<IEnumerable<Appointment>> GetDoctorsAppointmetsAsync(string accountId)
+        public async Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId)
         {
             var doctor = await this.doctorService.GetDoctorAsync(accountId);
 
@@ -78,7 +78,7 @@
                 throw new ArgumentException(message: "Invalid AccountId");
             }
 
-            var appointmets = await this.appointmentRepository.All()
+            var appointments = await this.appointmentRepository.All()
                 .Where(a => a.DoctorId == doctor.Id)
                 .Select(a => new Appointment()
                 {
@@ -90,7 +90,7 @@
                 })
                 .ToListAsync();
 
-            return appointmets;
+            return appointments;
         }
 
         public async Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId)
@@ -102,7 +102,7 @@
                 throw new ArgumentException(message: "Invalid AccountId");
             }
 
-            var appointmets = await this.appointmentRepository.All()
+            var appointments = await this.appointmentRepository.All()
                     .Where(a => a.PatientId == patient.Id)
                     .Select(a => new Appointment()
                     {
@@ -116,7 +116,7 @@
                     })
                     .ToListAsync();
 
-            return appointmets;
+            return appointments;
         }
 
         public async Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId)
@@ -132,7 +132,7 @@
 
             return await this.appointmentRepository.SaveChangesAsync() switch
             {
-                0 => "Ther was a problem Updating the Entity",
+                0 => "There was a problem Updating the Entity",
                 _ => true
             };
         }

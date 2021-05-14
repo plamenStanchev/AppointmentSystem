@@ -1,12 +1,12 @@
-﻿namespace AppointmentSystem.Server.Features.Appointmets.Controllers
+﻿namespace AppointmentSystem.Server.Features.Appointments.Controllers
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Infrastructure.Constants;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Infrastructure.Services;
-    using AppointmentSystem.Server.Features.Appointmets.Hubs;
-    using AppointmentSystem.Server.Features.Appointmets.Models;
+    using AppointmentSystem.Server.Features.Appointments.Hubs;
+    using AppointmentSystem.Server.Features.Appointments.Models;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
@@ -50,9 +50,9 @@
         }
 
 
-        [HttpGet(nameof(GetPatientAppointmets))]
+        [HttpGet(nameof(GetPatientAppointments))]
         [Authorize(Roles = RolesNames.Patient)]
-        public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetPatientAppointmets(string accountId)
+        public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetPatientAppointments(string accountId)
         {
             var patientAppointments = await this.appointmentService.GetPatientAppointAsync(accountId);
             var patientAppointmentDtos = patientAppointments
@@ -63,11 +63,11 @@
             return patientAppointmentDtos;
         }
 
-        [HttpGet(nameof(GetDoctorAppointmets))]
+        [HttpGet(nameof(GetDoctorAppointments))]
         [Authorize(Roles = RolesNames.Doctor)]
-        public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetDoctorAppointmets(string accountId)
+        public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetDoctorAppointments(string accountId)
         {
-            var doctorAppointments = await this.appointmentService.GetDoctorsAppointmetsAsync(accountId);
+            var doctorAppointments = await this.appointmentService.GetDoctorsAppointmentsAsync(accountId);
             var doctorAppointmetDtos = doctorAppointments
                 .Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
             doctorAppointmetDtos.ForEach(a => a.Succeeded = true);

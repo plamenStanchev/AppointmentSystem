@@ -3,14 +3,15 @@
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Core.Interfaces.Infrastructure;
     using AppointmentSystem.Core.Interfaces.Repository;
+    using AppointmentSystem.Infrastructure.Constants;
     using AppointmentSystem.Infrastructure.Data;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using AppointmentSystem.Infrastructure.Data.Repositories;
     using AppointmentSystem.Infrastructure.Logging;
     using AppointmentSystem.Infrastructure.Services;
     using AppointmentSystem.Mapper;
-    using AppointmentSystem.Server.Features.Appointmets;
-    using AppointmentSystem.Server.Features.Citys;
+    using AppointmentSystem.Server.Features.Appointments;
+    using AppointmentSystem.Server.Features.Cities;
     using AppointmentSystem.Server.Features.Department;
     using AppointmentSystem.Server.Features.Doctors;
     using AppointmentSystem.Server.Features.Identity;
@@ -48,8 +49,7 @@
         public static IServiceCollection AddDatabase(
              this IServiceCollection services,
              IConfiguration configuration)
-            =>
-            services
+            => services
                 .AddDbContext<ApplicationDbContext>(options => options
                     .UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
@@ -132,12 +132,12 @@
         }
 
         public static IServiceCollection AddAuthorizationFallback(this IServiceCollection services)
-            => services.AddAuthorization(optins =>
+            => services.AddAuthorization(/*options =>
             {
-                optins.FallbackPolicy = new AuthorizationPolicyBuilder()
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .Build();
-            });
+            }*/);
 
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, AppSettings appSettings)
         {
