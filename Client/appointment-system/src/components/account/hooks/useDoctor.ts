@@ -14,7 +14,7 @@ interface ICreateDoctorModel {
 const baseUrl = "/doctors";
 
 const useDoctor = () => {
-  const { get, post } = useApi();
+  const { post, get } = useApi();
 
   const createDoctor = async (model: ICreateDoctorModel) => {
     try {
@@ -36,7 +36,9 @@ const useDoctor = () => {
   const getDoctor = async (accountId: string | undefined) => {
     try {
       let patientModel;
-      const patientResponse = await get(`${baseUrl}/get?accountId${accountId}`);
+      const patientResponse = await get(
+        `${baseUrl}/get?accountId=${accountId}`
+      );
 
       if (!patientResponse) {
         throw new Error("Unknown error");

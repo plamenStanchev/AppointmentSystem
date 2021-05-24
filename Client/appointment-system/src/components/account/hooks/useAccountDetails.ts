@@ -2,7 +2,7 @@ import useToken from "../../../shared/hooks/useToken";
 
 export interface AccountModel {
   email: string;
-  nameId: string;
+  nameid: string;
   role: string;
   nbf: number;
   exp: number;
@@ -17,7 +17,7 @@ const useAccountDetails = () => {
 
   const account = jwtDecode(getToken);
 
-  const accountId = account?.nameId;
+  const accountId = account?.nameid;
   const role = account?.role;
 
   return { accountId, role };
