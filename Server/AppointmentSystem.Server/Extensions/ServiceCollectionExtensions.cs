@@ -19,6 +19,7 @@
 	using AppointmentSystem.Server.Features.Doctors;
 	using AppointmentSystem.Server.Features.Identity;
 	using AppointmentSystem.Server.Features.Patients;
+	using AppointmentSystem.Server.Filters;
 	using AppointmentSystem.Server.Requirements;
 	using Microsoft.AspNetCore.Authentication.JwtBearer;
 	using Microsoft.AspNetCore.Authorization;
@@ -27,11 +28,10 @@
 	using Microsoft.Extensions.DependencyInjection;
 	using Microsoft.IdentityModel.Tokens;
 	using Microsoft.OpenApi.Models;
-	using Swashbuckle.AspNetCore.SwaggerGen;
 
 	public static class ServiceCollectionExtensions
 	{
-		public static IServiceCollection AddSignalExtension(this IServiceCollection services)
+		public static IServiceCollection AddSignalRExtension(this IServiceCollection services)
 		{
 			services.AddSignalR();
 
@@ -116,22 +116,6 @@
 
 				c.ResolveConflictingActions(apiDescription => apiDescription.First());
 			});
-
-		internal class CustomOrderControllerSwaggerFilter : IDocumentFilter
-		{
-			public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
-			{
-				var newPaths = new OpenApiPaths();
-
-				swaggerDoc
-					.Paths
-					.OrderByDescending(x => x.Key.Contains("Identity"))
-					.ToList()
-					.ForEach(x => newPaths.Add(x.Key, x.Value));
-
-				swaggerDoc.Paths = newPaths;
-			}
-		}
 
 		public static IServiceCollection AddAuthorizationExtension(this IServiceCollection services)
 			=> services.AddAuthorization(options =>

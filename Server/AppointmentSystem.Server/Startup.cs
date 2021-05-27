@@ -23,7 +23,7 @@ namespace AppointmentSystem.Server
 				.AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
 				.AddApplicationServices()
 				.AddSwagger()
-				.AddSignalExtension()
+				.AddSignalRExtension()
 				.AddControllers();
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
