@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Server.Features.Appointmets.Models
+﻿namespace AppointmentSystem.Server.Features.Appointments.Models
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Mapper;
@@ -42,4 +42,3 @@
         }
     }
 }
-

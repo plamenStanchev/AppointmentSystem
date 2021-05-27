@@ -1,13 +1,15 @@
 ﻿namespace AppointmentSystem.Server.Features.Department.Controllers
 {
+    using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
     using AppointmentSystem.Server.Features.Department.Models;
-    using AppointmentSystem.Core.Entities.Models;
+    using AppointmentSystem.Infrastructure.Services;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
-    using AppointmentSystem.Infrastructure.Services;
+    using System.Linq;
+    using System.Collections.Generic;
 
     public class DepartmentController : ApiController
     {
@@ -52,6 +54,16 @@
             var departmentDto = this.mapepr.Map<DepartmentDetailsResponseModel>(department);
             departmentDto.Succeeded = true;
             return departmentDto;
+        }
+
+        [HttpGet(nameof(All))]
+        public async Task<ActionResult<IEnumerable<DepartmentDetailsResponseModel>>> All()
+        {
+            var departments = await this.departmentService.GetAllDepartmentsAsync();
+            var departmentsDto = departments.Select(d => this.mapepr.Map<DepartmentDetailsResponseModel>(d)).ToList();
+            departmentsDto.ForEach(d => d.Succeeded = true);
+
+            return this.Ok(departmentsDto);
         }
     }
 }

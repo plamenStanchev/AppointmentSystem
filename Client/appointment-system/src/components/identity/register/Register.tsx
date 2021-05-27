@@ -1,50 +1,67 @@
-import { Grid, TextField } from "@material-ui/core";
-import registerFormConfig from "./Register.config";
+import { Avatar, Grid, TextField, Typography } from "@material-ui/core";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { useForm } from "react-hook-form";
-import IdentityService from "../services/IdentityService";
+import useIdentity from "../hooks/useIdentity";
+import registerFormConfig from "./Register.config";
+import useStyles from "./Register.styles";
 
 interface Props {
   setToken(loginResponseModel: any): void;
-  classesForm: string;
   button: any;
 }
 
-const Regsiter = (props: Props) => {
-  const { setToken, classesForm, button } = props;
-  const { register, handleSubmit } = useForm();
+interface RegisterModel {
+  username: string;
+  email: string;
+  confirmEmail: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const Register = (props: Props) => {
+  const classes = useStyles();
+  const { setToken, button } = props;
+  const { register: registerForm, handleSubmit } = useForm<RegisterModel>();
+  const { register } = useIdentity();
 
   const onSubmit = async (registerModel: any) => {
-    const token = await IdentityService.register(registerModel);
+    const token = await register(registerModel);
     setToken(token);
   };
 
   return (
-    <>
+    <div className={classes.view}>
+      <Avatar className={classes.avatar}>
+        <LockOutlinedIcon />
+      </Avatar>
+      <Typography component='h1' variant='h5'>
+        Register
+      </Typography>
       <form
-        className={classesForm}
+        className={classes.form}
         noValidate
         onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          {registerFormConfig.map((f) => (
-            <Grid key={f.id} item xs={12}>
+          {registerFormConfig.map((field) => (
+            <Grid key={field.id} item xs={12}>
               <TextField
-                {...register(f.id)}
+                {...registerForm(field.id as keyof RegisterModel)}
                 variant='outlined'
                 required
                 fullWidth
-                id={f.id}
-                label={f.label}
-                name={f.name}
-                autoComplete={f.autoComplete}
-                type={f.type}
+                id={field.id}
+                label={field.label}
+                name={field.name}
+                autoComplete={field.autoComplete}
+                type={field.type}
               />
             </Grid>
           ))}
         </Grid>
         {button}
       </form>
-    </>
+    </div>
   );
 };
 
-export default Regsiter;
+export default Register;

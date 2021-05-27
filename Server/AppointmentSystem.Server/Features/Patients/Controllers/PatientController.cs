@@ -31,7 +31,7 @@
         [HttpPost(nameof(Create))]
         public async Task<ActionResult<Result>> Create(PatientRequestModel patientModel)
         {
-            var validatioResult = await base.ValidaiteAccountId(patientModel.AccountId);
+            var validatioResult = await base.ValidateAccountId(patientModel.AccountId);
             if (!validatioResult)
             {
                 return base.GenerateResultResponse(false);
@@ -45,7 +45,7 @@
         [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<PatientDetailsResponseModel>> Get(string accountId)
         {
-            var validationResult = await base.ValidaiteAccountId(accountId);
+            var validationResult = await base.ValidateAccountId(accountId);
             if (!validationResult)
             {
                 return this.BadRequest("Problem with Authentication");
@@ -67,7 +67,7 @@
         [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<Result>> Delete(string accountId)
         {
-            var validateResult = await base.ValidaiteAccountId(accountId);
+            var validateResult = await base.ValidateAccountId(accountId);
             if (!validateResult)
             {
                 base.GenerateResultResponse(validateResult);
@@ -82,7 +82,7 @@
         [Authorize(Roles = RolesNames.Patient)]
         public async Task<ActionResult<Result>> Update(PatientRequestModel patientModel)
         {
-            var validateResult = await base.ValidaiteAccountId(patientModel.AccountId);
+            var validateResult = await base.ValidateAccountId(patientModel.AccountId);
             if (!validateResult)
             {
                 return base.GenerateResultResponse(validateResult);

@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Server.Features.Citys
+﻿namespace AppointmentSystem.Server.Features.Cities
 {
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Repository;
@@ -22,7 +22,7 @@
 
             return await this.repository.SaveChangesAsync() switch
             {
-                0 => "No record wher added",
+                0 => "No record where added",
                 _ => true
             };
         }

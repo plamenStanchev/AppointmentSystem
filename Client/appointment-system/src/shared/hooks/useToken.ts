@@ -5,7 +5,7 @@ interface LoginResponseModel {
   hasRole: boolean;
   role: string;
   succeeded: boolean;
-  errorMesage: string;
+  errorMessage: string;
 }
 
 const useToken = () => {

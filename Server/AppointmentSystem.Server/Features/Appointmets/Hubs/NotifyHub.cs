@@ -1,4 +1,4 @@
-namespace AppointmentSystem.Server.Features.Appointmets.Hubs
+namespace AppointmentSystem.Server.Features.Appointments.Hubs
 {
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.SignalR;

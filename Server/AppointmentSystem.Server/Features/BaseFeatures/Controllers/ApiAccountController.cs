@@ -14,7 +14,7 @@
             this.userManager = userManager;
         }
 
-        protected async Task<bool> ValidaiteAccountId(string accountId)
+        protected async Task<bool> ValidateAccountId(string accountId)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 

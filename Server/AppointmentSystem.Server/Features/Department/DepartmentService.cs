@@ -5,6 +5,7 @@
     using AppointmentSystem.Core.Interfaces.Features;
 
     using System.Threading.Tasks;
+    using System.Collections.Generic;
     using AppointmentSystem.Core.Interfaces.Repository;
     using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +44,10 @@
         public async Task<Department> GetDepartmentAsync(int departmentId)
             => await this.repository.All()
                 .FirstOrDefaultAsync(d => d.Id == departmentId);
+
+        public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
+            => await this.repository.AllAsNoTracking()
+                .ToListAsync();
 
         private async Task<Result> SaveChangesAsync()
             => await this.repository.SaveChangesAsync() switch

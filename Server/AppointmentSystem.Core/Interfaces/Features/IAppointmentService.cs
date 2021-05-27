@@ -14,7 +14,7 @@
 
         public Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId);
 
-        public Task<IEnumerable<Appointment>> GetDoctorsAppointmetsAsync(string accountId);
+        public Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId);
 
         public Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId);
 
