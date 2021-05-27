@@ -5,7 +5,7 @@ namespace AppointmentSystem.Server.Requirements
 	using AppointmentSystem.Infrastructure.Constants;
 	using Microsoft.AspNetCore.Authorization;
 
-	public class ClaimRequirementsHandler : IAuthorizationHandler
+	internal class ClaimRequirementsHandler : IAuthorizationHandler
 	{
 		public Task HandleAsync(AuthorizationHandlerContext context)
 		{
