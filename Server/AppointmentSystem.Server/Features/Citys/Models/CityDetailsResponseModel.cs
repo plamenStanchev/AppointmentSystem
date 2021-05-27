@@ -1,13 +1,12 @@
 ﻿namespace AppointmentSystem.Server.Features.Cities.Models
 {
-    using AppointmentSystem.Core.Entities.Models;
-    using AppointmentSystem.Mapper;
-    using AppointmentSystem.Server.Features.BaseFeatures.Models;
+	using AppointmentSystem.Core.Entities.Models;
+	using AppointmentSystem.Mapper;
 
-    public class CityDetailsResponseModel : BaseResponseModel, IMapFrom<City>
-    {
-        public string Name { get; set; }
+	public class CityDetailsResponseModel : IMapFrom<City>
+	{
+		public string Name { get; set; }
 
-        public int Id { get; set; }
-    }
+		public int Id { get; set; }
+	}
 }

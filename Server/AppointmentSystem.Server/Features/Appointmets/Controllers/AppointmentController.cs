@@ -58,8 +58,6 @@
             var patientAppointmentDtos = patientAppointments
                 .Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
 
-            patientAppointmentDtos.ForEach(a => a.Succeeded = true);
-
             return patientAppointmentDtos;
         }
 
@@ -70,8 +68,7 @@
             var doctorAppointments = await this.appointmentService.GetDoctorsAppointmentsAsync(accountId);
             var doctorAppointmetDtos = doctorAppointments
                 .Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
-            doctorAppointmetDtos.ForEach(a => a.Succeeded = true);
-
+                
             return doctorAppointmetDtos;
         }
 

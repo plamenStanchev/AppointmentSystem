@@ -37,25 +37,17 @@
 			var validationResult = await base.ValidateAccountId(accountId);
 			if (!validationResult)
 			{
-				return this.BadRequest(new DoctorDetailsResponseModel
-				{
-					Succeeded = false,
-					ErrorMesage = "Problem with Authentication"
-				});
+				return this.BadRequest("Invalid request");
 			}
 			var result = await this.doctorService.GetDoctorAsync(accountId);
 
 			if (result is null)
 			{
-				return this.BadRequest(new DoctorDetailsResponseModel
-				{
-					Succeeded = false,
-					ErrorMesage = "Doctor is missing"
-				});
+				return this.BadRequest("There isn't a doctor with this Id");
 			}
 
 			var doctorResponse = this.mapper.Map<DoctorDetailsResponseModel>(result);
-			doctorResponse.Succeeded = true;
+
 			return this.Ok(doctorResponse);
 		}
 
@@ -106,8 +98,6 @@
 		{
 			var result = await this.doctorService.GetDoctorsInCity(cityId);
 			var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
-
-			dtoResult.ForEach(c => c.Succeeded = true);
 
 			return this.Ok(dtoResult);
 		}
