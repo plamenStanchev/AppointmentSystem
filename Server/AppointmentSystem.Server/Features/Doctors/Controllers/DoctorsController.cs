@@ -30,8 +30,8 @@
 			this.mapper = mapper;
 		}
 
-		// [Authorize(Roles = RolesNames.Doctor)]
 		[Roles(RolesNames.Doctor)]
+		[HttpGet]
 		public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);

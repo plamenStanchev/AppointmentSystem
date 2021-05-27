@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Server.Extensions
 {
 	using System.Linq;
+	using System.Reflection;
 	using System.Text;
 	using System.Threading.Tasks;
 	using AppointmentSystem.Core.Interfaces.Features;
@@ -85,7 +86,7 @@
 					"v1",
 					new OpenApiInfo
 					{
-						Title = "AppointmentSystem.Server",
+						Title = Assembly.GetExecutingAssembly().GetName().Name,
 						Version = "v1"
 					});
 
