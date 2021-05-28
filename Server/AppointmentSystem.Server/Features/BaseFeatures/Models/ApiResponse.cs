@@ -33,5 +33,7 @@ namespace AppointmentSystem.Server.Features.BaseFeatures.Models
 	public static class ApiResponseExtensions
 	{
 		public static ApiResponse<T> ToApiResponse<T>(this T data) => new(data);
+
+		public static ApiResponse<T> ToApiError<T>(this T data, string item) => new(new ApiError(item, data as string));
 	}
 }
