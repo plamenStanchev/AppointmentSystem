@@ -6,10 +6,10 @@
 	using AppointmentSystem.Infrastructure.Constants;
 	using AppointmentSystem.Infrastructure.Data.Identity;
 	using AppointmentSystem.Infrastructure.Services;
+	using AppointmentSystem.Server.Attributes;
 	using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
 	using AppointmentSystem.Server.Features.Patients.Models;
 	using AutoMapper;
-	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -41,8 +41,8 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Patient)]
 		[HttpGet(nameof(Get))]
-		[Authorize(Roles = RolesNames.Patient)]
 		public async Task<ActionResult<PatientDetailsResponseModel>> Get(string accountId)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);
@@ -60,8 +60,8 @@
 			return this.Ok(patientDto);
 		}
 
+		[Roles(RolesNames.Patient)]
 		[HttpGet(nameof(Delete))]
-		[Authorize(Roles = RolesNames.Patient)]
 		public async Task<ActionResult<Result>> Delete(string accountId)
 		{
 			var validateResult = await base.ValidateAccountId(accountId);
@@ -75,8 +75,8 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Patient)]
 		[HttpPost(nameof(Update))]
-		[Authorize(Roles = RolesNames.Patient)]
 		public async Task<ActionResult<Result>> Update(PatientRequestModel patientModel)
 		{
 			var validateResult = await base.ValidateAccountId(patientModel.AccountId);

@@ -31,7 +31,7 @@
 		}
 
 		[Roles(RolesNames.Doctor)]
-		[HttpGet]
+		[HttpGet("{action}")]
 		public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);
@@ -64,8 +64,8 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Doctor)]
 		[HttpGet(nameof(Update))]
-		[Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
 		public async Task<ActionResult<Result>> Update(DoctorRequestModel requestModel)
 		{
 			var validationResult = await base.ValidateAccountId(requestModel.AccountId);
@@ -78,8 +78,8 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Doctor)]
 		[HttpGet(nameof(Delete))]
-		[Authorize(Roles = RolesNames.Doctor + Comma + RolesNames.Admin)]
 		public async Task<ActionResult<Result>> Delete(string accountId)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);

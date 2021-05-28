@@ -5,7 +5,9 @@
 	using System.Threading.Tasks;
 	using AppointmentSystem.Core.Entities.Models;
 	using AppointmentSystem.Core.Interfaces.Features;
+	using AppointmentSystem.Infrastructure.Constants;
 	using AppointmentSystem.Infrastructure.Services;
+	using AppointmentSystem.Server.Attributes;
 	using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
 	using AppointmentSystem.Server.Features.Department.Models;
 	using AutoMapper;
@@ -24,6 +26,7 @@
 			this.mapper = mapper;
 		}
 
+		[Roles(RolesNames.Admin)]
 		[HttpPost(nameof(Create))]
 		public async Task<ActionResult<Result>> Create(DepartmentRequestModel departmentModel)
 		{
@@ -32,6 +35,7 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Admin)]
 		[HttpGet(nameof(Delete))]
 		public async Task<ActionResult<Result>> Delete(int departmentId)
 		{
@@ -39,6 +43,7 @@
 			return base.GenerateResultResponse(result);
 		}
 
+		[Roles(RolesNames.Admin)]
 		[HttpPost(nameof(Update))]
 		public async Task<ActionResult<Result>> Update(DepartmentRequestModel departmentModel)
 		{
