@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { IApiResponse } from "../models/IApiResponse";
 import useToken from "./useToken";
 
 const useApi = () => {
@@ -19,13 +20,18 @@ const useApi = () => {
 
   const combineApiUrl = createUrlCombiner("https://localhost:5001/api");
   const get = <R>(url: string, config?: AxiosRequestConfig) =>
-    axios.get<R>(combineApiUrl(url), combineConfig(config));
+    axios
+      .get<IApiResponse<R>>(combineApiUrl(url), combineConfig(config))
+      .then((d) => d.data);
 
   const post = <R, D = unknown>(
     url: string,
     data?: D,
     config?: AxiosRequestConfig
-  ) => axios.post<R>(combineApiUrl(url), data, combineConfig(config));
+  ) =>
+    axios
+      .post<IApiResponse<R>>(combineApiUrl(url), data, combineConfig(config))
+      .then((d) => d.data);
 
   return { get, post };
 };
