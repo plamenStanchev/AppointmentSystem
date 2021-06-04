@@ -2,7 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 	using AppointmentSystem.Core.Entities.Models;
 	using AppointmentSystem.Core.Interfaces.Features;
 	using AppointmentSystem.Infrastructure.Constants;
@@ -42,19 +43,19 @@
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Create(MessagePost messagePost)
+		public async Task<IActionResult> Create(MessagePost messagePost, CancellationToken cancellationToken = default)
 		{
 			// await this.hub.Clients.All.SendAsync("test", "The message '" + messagePost.Message + "' has been received");
-			await this.hub.Clients.All.SendAsync("rest", messagePost.Message);
+			await this.hub.Clients.All.SendAsync("rest", messagePost.Message, cancellationToken);
 			return Ok();
 		}
 
 
 		[Roles(RolesNames.Patient)]
 		[HttpGet(nameof(GetPatientAppointments))]
-		public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetPatientAppointments(string accountId)
+		public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetPatientAppointments(string accountId, CancellationToken cancellationToken = default)
 		{
-			var patientAppointments = await this.appointmentService.GetPatientAppointAsync(accountId);
+			var patientAppointments = await this.appointmentService.GetPatientAppointAsync(accountId, cancellationToken);
 			var patientAppointmentDtos = patientAppointments
 				.Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
 
@@ -63,9 +64,9 @@
 
 		[Roles(RolesNames.Doctor)]
 		[HttpGet(nameof(GetDoctorAppointments))]
-		public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetDoctorAppointments(string accountId)
+		public async Task<ActionResult<IEnumerable<AppointmentDetailsResponseModel>>> GetDoctorAppointments(string accountId, CancellationToken cancellationToken = default)
 		{
-			var doctorAppointments = await this.appointmentService.GetDoctorsAppointmentsAsync(accountId);
+			var doctorAppointments = await this.appointmentService.GetDoctorsAppointmentsAsync(accountId,cancellationToken);
 			var doctorAppointmetDtos = doctorAppointments
 				.Select(a => this.mapper.Map<AppointmentDetailsResponseModel>(a)).ToList();
 
@@ -74,31 +75,31 @@
 
 		[Roles(RolesNames.Patient)]
 		[HttpPost(nameof(Create))]
-		public async Task<ActionResult<Result>> Create(AppointmentRequestModel appointmentModel)
+		public async Task<ActionResult<Result>> Create(AppointmentRequestModel appointmentModel, CancellationToken cancellationToken = default)
 		{
 			var appointmet = this.mapper.Map<Appointment>(appointmentModel);
 			var accountId = this.userManager.GetUserId(this.User);
 
-			var result = await this.appointmentService.CreateAppointmentAsync(appointmet, accountId);
+			var result = await this.appointmentService.CreateAppointmentAsync(appointmet, accountId, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Patient, RolesNames.Doctor)]
 		[HttpPost(nameof(Update))]
-		public async Task<ActionResult<Result>> Update(AppointmentRequestModel appointmentModel)
+		public async Task<ActionResult<Result>> Update(AppointmentRequestModel appointmentModel, CancellationToken cancellationToken = default)
 		{
 			var appointmet = this.mapper.Map<Appointment>(appointmentModel);
 			var accontId = this.userManager.GetUserId(this.User);
-			var result = await this.appointmentService.UpdateAppointmentAsync(appointmet, accontId);
+			var result = await this.appointmentService.UpdateAppointmentAsync(appointmet, accontId, cancellationToken);
 
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Patient, RolesNames.Doctor)]
 		[HttpPost(nameof(Delete))]
-		public async Task<ActionResult<Result>> Delete(string accountId, int appointId)
+		public async Task<ActionResult<Result>> Delete(string accountId, int appointId, CancellationToken cancellationToken = default)
 		{
-			var result = await this.appointmentService.DeleteAppointmentAsync(appointId, accountId);
+			var result = await this.appointmentService.DeleteAppointmentAsync(appointId, accountId, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 	}

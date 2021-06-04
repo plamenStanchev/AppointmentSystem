@@ -9,6 +9,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     //TODO : Move validation in different methods
@@ -31,9 +32,9 @@
         }
 
         //TODO Move Validation Out OF Method
-        public async Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId)
+        public async Task<Result> CreateAppointmentAsync(Appointment appointment, string patientAccountId, CancellationToken cancellationToken = default)
         {
-            var patientCheck = await this.patientService.GetPatientAsync(patientAccountId);
+            var patientCheck = await this.patientService.GetPatientAsync(patientAccountId, cancellationToken);
 
             if (patientCheck?.Id != appointment.PatientId || patientCheck is null)
             {
@@ -42,16 +43,16 @@
 
             await this.appointmentRepository.AddAsync(appointment);
 
-            return await this.appointmentRepository.SaveChangesAsync() switch
+            return await this.appointmentRepository.SaveChangesAsync(cancellationToken) switch
             {
                 0 => "There was a problem adding the the record",
                 _ => true
             };
         }
 
-        public async Task<Result> DeleteAppointmentAsync(int appointmentId, string doctorAccountId)
+        public async Task<Result> DeleteAppointmentAsync(int appointmentId, string doctorAccountId, CancellationToken cancellationToken = default)
         {
-            var doctor = await this.doctorService.GetDoctorAsync(doctorAccountId);
+            var doctor = await this.doctorService.GetDoctorAsync(doctorAccountId, cancellationToken);
 
             var appointment = await this.GetAppointmentAsync(appointmentId);
 
@@ -62,16 +63,16 @@
 
             this.appointmentRepository.Delete(appointment);
 
-            return await this.appointmentRepository.SaveChangesAsync() switch
+            return await this.appointmentRepository.SaveChangesAsync(cancellationToken) switch
             {
                 0 => "Problem during deleting",
                 _ => true
             };
         }
 
-        public async Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId)
+        public async Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId, CancellationToken cancellationToken = default)
         {
-            var doctor = await this.doctorService.GetDoctorAsync(accountId);
+            var doctor = await this.doctorService.GetDoctorAsync(accountId, cancellationToken);
 
             if (doctor is null)
             {
@@ -88,14 +89,14 @@
                     Doctor = a.Doctor,
                     Patient = a.Patient,
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return appointments;
         }
 
-        public async Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId)
+        public async Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId, CancellationToken cancellationToken = default)
         {
-            var patient = await this.patientService.GetPatientAsync(accountId);
+            var patient = await this.patientService.GetPatientAsync(accountId, cancellationToken);
 
             if (patient is null)
             {
@@ -114,14 +115,14 @@
                         PatientId = a.PatientId,
                         DoctorId = a.DoctorId
                     })
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
             return appointments;
         }
 
-        public async Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId)
+        public async Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId, CancellationToken cancellationToken = default)
         {
-            var doctor = await this.doctorService.GetDoctorAsync(doctorAccountId);
+            var doctor = await this.doctorService.GetDoctorAsync(doctorAccountId, cancellationToken);
 
             if (doctor is null)
             {
@@ -130,15 +131,15 @@
 
             this.appointmentRepository.Update(appointment);
 
-            return await this.appointmentRepository.SaveChangesAsync() switch
+            return await this.appointmentRepository.SaveChangesAsync(cancellationToken) switch
             {
                 0 => "There was a problem Updating the Entity",
                 _ => true
             };
         }
 
-        public async Task<Appointment> GetAppointmentAsync(int appointmentId)
+        public async Task<Appointment> GetAppointmentAsync(int appointmentId, CancellationToken cancellationToken = default)
             => await this.appointmentRepository.All()
-                .FirstOrDefaultAsync(a => a.Id == appointmentId);
+                .FirstOrDefaultAsync(a => a.Id == appointmentId, cancellationToken);
     }
 }

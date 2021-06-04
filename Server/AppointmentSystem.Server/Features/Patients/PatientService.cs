@@ -11,6 +11,7 @@
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore;
     using AppointmentSystem.Infrastructure.Extensions;
+    using System.Threading;
 
     //TODO : Move validation in difrent methods
     internal class PatientService : IPatientService
@@ -26,7 +27,7 @@
             this.userManager = userManager;
         }
 
-        public async Task<Result> CreatePatientAsync(Patient patient)
+        public async Task<Result> CreatePatientAsync(Patient patient, CancellationToken cancellationToken = default)
         {
             var user = await userManager.FindByIdAsync(patient.AccountId);
             if (user == null)
@@ -47,12 +48,12 @@
 
             return result.Succeeded switch
             {
-                true => await this.repository.SaveChangesAsync() != default,
+                true => await this.repository.SaveChangesAsync(cancellationToken) != default,
                 _ => result.GetError()
             };
         }
 
-        public async Task<Result> DeletePatientAsync(string accountId)
+        public async Task<Result> DeletePatientAsync(string accountId, CancellationToken cancellationToken = default)
         {
             var patientResult = await this.GetPatientAsync(accountId);
 
@@ -67,18 +68,18 @@
 
             this.repository.Delete(patientResult);
 
-            return await this.repository.SaveChangesAsync() != default;
+            return await this.repository.SaveChangesAsync(cancellationToken) != default;
         }
 
-        public async Task<Patient> GetPatientAsync(string accountId)
+        public async Task<Patient> GetPatientAsync(string accountId, CancellationToken cancellationToken = default)
             => await this.repository.All()
-                .FirstOrDefaultAsync(p => p.AccountId == accountId);
+                .FirstOrDefaultAsync(p => p.AccountId == accountId, cancellationToken);
 
-        public async Task<Result> UpdatePatientAsync(Patient patient)
+        public async Task<Result> UpdatePatientAsync(Patient patient,CancellationToken cancellationToken = default)
         {
             this.repository.Update(patient);
 
-            return await this.repository.SaveChangesAsync() != default;
+            return await this.repository.SaveChangesAsync(cancellationToken) != default;
         }
     }
 }
