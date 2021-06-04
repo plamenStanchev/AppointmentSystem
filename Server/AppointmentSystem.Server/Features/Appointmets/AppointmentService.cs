@@ -54,7 +54,7 @@
         {
             var doctor = await this.doctorService.GetDoctorAsync(doctorAccountId, cancellationToken);
 
-            var appointment = await this.GetAppointmentAsync(appointmentId);
+            var appointment = await this.GetAppointmentAsync(appointmentId, cancellationToken);
 
             if (doctor?.Id != appointment?.DoctorId || appointment is null || doctor is null) // ??
             {

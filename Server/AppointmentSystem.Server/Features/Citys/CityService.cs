@@ -48,7 +48,7 @@
         public async Task<City> GetCityAsync(int cityId, CancellationToken cancellationToken = default)
             => await this.repository
                 .AllAsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == cityId);
+                .FirstOrDefaultAsync(c => c.Id == cityId, cancellationToken);
 
         public async Task<IEnumerable<City>> GetAllCitiesAsync(CancellationToken cancellationToken = default)
             => await this.repository.AllAsNoTracking()

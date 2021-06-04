@@ -15,7 +15,7 @@
     using System.Threading.Tasks;
     using System.Threading;
 
-    //TODO : Move validation in difrent methods
+    //TODO : Move validation in different methods
     internal class DoctorService : IDoctorService
     {
         private readonly IDeletableEntityRepository<Doctor> repository;
@@ -33,7 +33,7 @@
             var user = await this.userManager.FindByIdAsync(doctor.AccountId);
             if (user is null)
             {
-                return "this doctor account id dosent exist";
+                return "this doctor account id doesn't exist";
             }
             var doctorExists = await this.GetDoctorAsync(doctor.AccountId, cancellationToken);
 
@@ -57,7 +57,7 @@
         public async Task<Result> DeleteDoctorAsync(string accountId, CancellationToken cancellationToken = default)
         {
             var doctorResult = await this.repository.All()
-                .FirstOrDefaultAsync(d => d.AccountId == accountId);
+                .FirstOrDefaultAsync(d => d.AccountId == accountId, cancellationToken);
 
             if (doctorResult is null)
             {

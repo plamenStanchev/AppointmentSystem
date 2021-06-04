@@ -28,7 +28,7 @@
 
         public async Task<Result> DeleteDepartmentAsync(int departmentId, CancellationToken cancellationToken = default)
         {
-            var departmentResult = await this.GetDepartmentAsync(departmentId);
+            var departmentResult = await this.GetDepartmentAsync(departmentId, cancellationToken);
 
             this.repository.Delete(departmentResult);
 

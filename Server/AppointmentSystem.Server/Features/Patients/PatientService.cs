@@ -13,7 +13,7 @@
     using AppointmentSystem.Infrastructure.Extensions;
     using System.Threading;
 
-    //TODO : Move validation in difrent methods
+    //TODO : Move validation in different methods
     internal class PatientService : IPatientService
     {
         private readonly IDeletableEntityRepository<Patient> repository;
@@ -21,7 +21,7 @@
 
         public PatientService(
             IDeletableEntityRepository<Patient> repository,
-              UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             this.repository = repository;
             this.userManager = userManager;
@@ -32,9 +32,9 @@
             var user = await userManager.FindByIdAsync(patient.AccountId);
             if (user == null)
             {
-                return "this patients account id dosent exist";
+                return "this patients account id doesn't exist";
             }
-            var patientExists = await this.GetPatientAsync(patient.AccountId);
+            var patientExists = await this.GetPatientAsync(patient.AccountId, cancellationToken);
 
             if (patientExists != null)
             {
@@ -55,7 +55,7 @@
 
         public async Task<Result> DeletePatientAsync(string accountId, CancellationToken cancellationToken = default)
         {
-            var patientResult = await this.GetPatientAsync(accountId);
+            var patientResult = await this.GetPatientAsync(accountId, cancellationToken);
 
             if (patientResult is null)
             {
@@ -75,7 +75,7 @@
             => await this.repository.All()
                 .FirstOrDefaultAsync(p => p.AccountId == accountId, cancellationToken);
 
-        public async Task<Result> UpdatePatientAsync(Patient patient,CancellationToken cancellationToken = default)
+        public async Task<Result> UpdatePatientAsync(Patient patient, CancellationToken cancellationToken = default)
         {
             this.repository.Update(patient);
 
