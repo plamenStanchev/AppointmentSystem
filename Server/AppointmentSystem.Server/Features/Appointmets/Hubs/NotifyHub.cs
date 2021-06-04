@@ -1,5 +1,6 @@
 namespace AppointmentSystem.Server.Features.Appointments.Hubs
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.SignalR;
 
@@ -15,14 +16,14 @@ namespace AppointmentSystem.Server.Features.Appointments.Hubs
         //     await Clients.Client(Context.ConnectionId).SendAsync("rest", "Connected");
         // }
 
-        public async Task Notify(string value)
+        public async Task Notify(string value, CancellationToken cancellationToken = default)
         {
             await Task.Delay(3000);
 
             for (int i = 0; i < 12; i++)
             {
                 await Task.Delay(500);
-                await this.Clients.All.SendAsync("rest", value);
+                await this.Clients.All.SendAsync("rest", value, cancellationToken);
             }
         }
     }

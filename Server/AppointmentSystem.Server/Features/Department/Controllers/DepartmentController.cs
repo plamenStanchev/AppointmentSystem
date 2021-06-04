@@ -2,7 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 	using AppointmentSystem.Core.Entities.Models;
 	using AppointmentSystem.Core.Interfaces.Features;
 	using AppointmentSystem.Infrastructure.Constants;
@@ -28,42 +29,42 @@
 
 		[Roles(RolesNames.Admin)]
 		[HttpPost(nameof(Create))]
-		public async Task<ActionResult<Result>> Create(DepartmentRequestModel departmentModel)
+		public async Task<ActionResult<Result>> Create(DepartmentRequestModel departmentModel, CancellationToken cancellationToken = default)
 		{
 			var department = this.mapper.Map<Department>(departmentModel);
-			var result = await this.departmentService.CreateDepartmentAsync(department);
+			var result = await this.departmentService.CreateDepartmentAsync(department, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Admin)]
 		[HttpGet(nameof(Delete))]
-		public async Task<ActionResult<Result>> Delete(int departmentId)
+		public async Task<ActionResult<Result>> Delete(int departmentId, CancellationToken cancellationToken = default)
 		{
-			var result = await this.departmentService.DeleteDepartmentAsync(departmentId);
+			var result = await this.departmentService.DeleteDepartmentAsync(departmentId, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Admin)]
 		[HttpPost(nameof(Update))]
-		public async Task<ActionResult<Result>> Update(DepartmentRequestModel departmentModel)
+		public async Task<ActionResult<Result>> Update(DepartmentRequestModel departmentModel, CancellationToken cancellationToken = default)
 		{
 			var department = this.mapper.Map<Department>(departmentModel);
-			var result = await this.departmentService.UpdateDepartmentAsync(department);
+			var result = await this.departmentService.UpdateDepartmentAsync(department,cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[HttpGet(nameof(Get))]
-		public async Task<ActionResult<DepartmentDetailsResponseModel>> Get(int departmentId)
+		public async Task<ActionResult<DepartmentDetailsResponseModel>> Get(int departmentId, CancellationToken cancellationToken = default)
 		{
-			var department = await this.departmentService.GetDepartmentAsync(departmentId);
+			var department = await this.departmentService.GetDepartmentAsync(departmentId, cancellationToken);
 			var departmentDto = this.mapper.Map<DepartmentDetailsResponseModel>(department);
 			return departmentDto;
 		}
 
 		[HttpGet(nameof(All))]
-		public async Task<ActionResult<IEnumerable<DepartmentDetailsResponseModel>>> All()
+		public async Task<ActionResult<IEnumerable<DepartmentDetailsResponseModel>>> All(CancellationToken cancellationToken = default)
 		{
-			var departments = await this.departmentService.GetAllDepartmentsAsync();
+			var departments = await this.departmentService.GetAllDepartmentsAsync(cancellationToken);
 			var departmentsDto = departments.Select(d => this.mapper.Map<DepartmentDetailsResponseModel>(d)).ToList();
 
 			return this.Ok(departmentsDto);

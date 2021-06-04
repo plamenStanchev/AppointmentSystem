@@ -2,7 +2,8 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Threading.Tasks;
+    using System.Threading;
+    using System.Threading.Tasks;
 	using AppointmentSystem.Core.Entities.Models;
 	using AppointmentSystem.Core.Interfaces.Features;
 	using AppointmentSystem.Infrastructure.Constants;
@@ -12,7 +13,6 @@
 	using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
 	using AppointmentSystem.Server.Features.Doctors.Models;
 	using AutoMapper;
-	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Identity;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -32,14 +32,14 @@
 
 		[Roles(RolesNames.Doctor)]
 		[HttpGet("{action}")]
-		public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
+		public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId, CancellationToken cancellationToken = default)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);
 			if (!validationResult)
 			{
 				return this.BadRequest("Invalid request");
 			}
-			var result = await this.doctorService.GetDoctorAsync(accountId);
+			var result = await this.doctorService.GetDoctorAsync(accountId, cancellationToken);
 
 			if (result is null)
 			{
@@ -52,7 +52,7 @@
 		}
 
 		[HttpPost(nameof(Create))]
-		public async Task<ActionResult<Result>> Create(DoctorRequestModel requestModel)
+		public async Task<ActionResult<Result>> Create(DoctorRequestModel requestModel, CancellationToken cancellationToken = default)
 		{
 			var validationResult = await base.ValidateExistAccount(requestModel.AccountId);
 			if (!validationResult)
@@ -60,13 +60,13 @@
 				return this.BadRequest("Problem with Authentication");
 			}
 			var doctor = this.mapper.Map<Doctor>(requestModel);
-			var result = await this.doctorService.CreateDoctorAsync(doctor);
+			var result = await this.doctorService.CreateDoctorAsync(doctor, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Doctor)]
 		[HttpGet(nameof(Update))]
-		public async Task<ActionResult<Result>> Update(DoctorRequestModel requestModel)
+		public async Task<ActionResult<Result>> Update(DoctorRequestModel requestModel, CancellationToken cancellationToken = default)
 		{
 			var validationResult = await base.ValidateAccountId(requestModel.AccountId);
 			if (!validationResult)
@@ -74,29 +74,29 @@
 				return this.BadRequest("Problem with Authentication");
 			}
 			var doctor = this.mapper.Map<Doctor>(requestModel);
-			var result = await this.doctorService.UpdateDoctorAsync(doctor);
+			var result = await this.doctorService.UpdateDoctorAsync(doctor, cancellationToken);
 			return base.GenerateResultResponse(result);
 		}
 
 		[Roles(RolesNames.Doctor)]
 		[HttpGet(nameof(Delete))]
-		public async Task<ActionResult<Result>> Delete(string accountId)
+		public async Task<ActionResult<Result>> Delete(string accountId, CancellationToken cancellationToken = default)
 		{
 			var validationResult = await base.ValidateAccountId(accountId);
 			if (!validationResult)
 			{
 				return this.BadRequest("Problem with Authentication");
 			}
-			var result = await this.doctorService.DeleteDoctorAsync(accountId);
+			var result = await this.doctorService.DeleteDoctorAsync(accountId, cancellationToken);
 			var user = await base.userManager.GetUserAsync(this.User);
 			await base.userManager.RemoveFromRoleAsync(user, RolesNames.Doctor);
 			return base.GenerateResultResponse(result);
 		}
 
 		[HttpGet(nameof(GetInCity))]
-		public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId)
+		public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId, CancellationToken cancellationToken = default)
 		{
-			var result = await this.doctorService.GetDoctorsInCity(cityId);
+			var result = await this.doctorService.GetDoctorsInCity(cityId, cancellationToken);
 			var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
 
 			return this.Ok(dtoResult);

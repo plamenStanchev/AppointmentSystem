@@ -8,49 +8,50 @@
     using System.Collections.Generic;
     using AppointmentSystem.Core.Interfaces.Repository;
     using Microsoft.EntityFrameworkCore;
+    using System.Threading;
 
     internal class DepartmentService : IDepartmentService
     {
         private readonly IDeletableEntityRepository<Department> repository;
 
-        public DepartmentService(IDeletableEntityRepository<Department> repository)
+        public DepartmentService(IDeletableEntityRepository<Department> repository, CancellationToken cancellationToken = default)
         {
             this.repository = repository;
         }
 
-        public async Task<Result> CreateDepartmentAsync(Department department)
+        public async Task<Result> CreateDepartmentAsync(Department department, CancellationToken cancellationToken = default)
         {
             await this.repository.AddAsync(department);
 
-            return await this.SaveChangesAsync();
+            return await this.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Result> DeleteDepartmentAsync(int departmentId)
+        public async Task<Result> DeleteDepartmentAsync(int departmentId, CancellationToken cancellationToken = default)
         {
             var departmentResult = await this.GetDepartmentAsync(departmentId);
 
             this.repository.Delete(departmentResult);
 
-            return await this.SaveChangesAsync();
+            return await this.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Result> UpdateDepartmentAsync(Department department)
+        public async Task<Result> UpdateDepartmentAsync(Department department, CancellationToken cancellationToken = default)
         {
             this.repository.Update(department);
 
-            return await this.SaveChangesAsync();
+            return await this.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<Department> GetDepartmentAsync(int departmentId)
+        public async Task<Department> GetDepartmentAsync(int departmentId, CancellationToken cancellationToken = default)
             => await this.repository.All()
-                .FirstOrDefaultAsync(d => d.Id == departmentId);
+                .FirstOrDefaultAsync(d => d.Id == departmentId, cancellationToken);
 
-        public async Task<IEnumerable<Department>> GetAllDepartmentsAsync()
+        public async Task<IEnumerable<Department>> GetAllDepartmentsAsync(CancellationToken cancellationToken = default)
             => await this.repository.AllAsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
-        private async Task<Result> SaveChangesAsync()
-            => await this.repository.SaveChangesAsync() switch
+        private async Task<Result> SaveChangesAsync(CancellationToken cancellationToken = default)
+            => await this.repository.SaveChangesAsync(cancellationToken) switch
             {
                 0 => "Problem",
                 _ => true

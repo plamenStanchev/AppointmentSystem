@@ -13,6 +13,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Threading;
 
     //TODO : Move validation in difrent methods
     internal class DoctorService : IDoctorService
@@ -27,14 +28,14 @@
             this.userManager = userManager;
         }
 
-        public async Task<Result> CreateDoctorAsync(Doctor doctor)
+        public async Task<Result> CreateDoctorAsync(Doctor doctor, CancellationToken cancellationToken = default)
         {
             var user = await this.userManager.FindByIdAsync(doctor.AccountId);
             if (user is null)
             {
                 return "this doctor account id dosent exist";
             }
-            var doctorExists = await this.GetDoctorAsync(doctor.AccountId);
+            var doctorExists = await this.GetDoctorAsync(doctor.AccountId, cancellationToken);
 
             if (doctorExists is not null)
             {
@@ -48,12 +49,12 @@
 
             return result.Succeeded switch
             {
-                true => await this.repository.SaveChangesAsync() != default,
+                true => await this.repository.SaveChangesAsync(cancellationToken) != default,
                 _ => result.GetError()
             };
         }
 
-        public async Task<Result> DeleteDoctorAsync(string accountId)
+        public async Task<Result> DeleteDoctorAsync(string accountId, CancellationToken cancellationToken = default)
         {
             var doctorResult = await this.repository.All()
                 .FirstOrDefaultAsync(d => d.AccountId == accountId);
@@ -69,21 +70,21 @@
 
             this.repository.Delete(doctorResult);
 
-            return await this.repository.SaveChangesAsync() != default;
+            return await this.repository.SaveChangesAsync(cancellationToken) != default;
         }
 
-        public async Task<Result> UpdateDoctorAsync(Doctor doctor)
+        public async Task<Result> UpdateDoctorAsync(Doctor doctor, CancellationToken cancellationToken = default)
         {
             this.repository.Update(doctor);
 
-            return await this.repository.SaveChangesAsync() != default;
+            return await this.repository.SaveChangesAsync(cancellationToken) != default;
         }
 
-        public async Task<Doctor> GetDoctorAsync(string accoutId)
+        public async Task<Doctor> GetDoctorAsync(string accoutId, CancellationToken cancellationToken = default)
             => await this.repository.All()
-                .FirstOrDefaultAsync(d => d.AccountId == accoutId);
+                .FirstOrDefaultAsync(d => d.AccountId == accoutId, cancellationToken);
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsInCity(int cityId)
+        public async Task<IEnumerable<Doctor>> GetDoctorsInCity(int cityId, CancellationToken cancellationToken = default)
         {
             var doctorListObject = await this.repository.All()
               .Where(d => d.CityId == cityId)
@@ -96,7 +97,7 @@
                   Description = d.Description,
                   Department = d.Department
               })
-              .ToListAsync();
+              .ToListAsync(cancellationToken);
 
             // .Select(d => new
             // {
