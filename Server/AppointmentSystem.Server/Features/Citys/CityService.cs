@@ -12,7 +12,7 @@
     {
         private readonly IDeletableEntityRepository<City> repository;
 
-        public CityService(IDeletableEntityRepository<City> repository, CancellationToken cancellationToken = default)
+        public CityService(IDeletableEntityRepository<City> repository)
         {
             this.repository = repository;
         }

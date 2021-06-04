@@ -14,7 +14,7 @@
     {
         private readonly IDeletableEntityRepository<Department> repository;
 
-        public DepartmentService(IDeletableEntityRepository<Department> repository, CancellationToken cancellationToken = default)
+        public DepartmentService(IDeletableEntityRepository<Department> repository)
         {
             this.repository = repository;
         }
