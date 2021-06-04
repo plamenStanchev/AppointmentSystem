@@ -12,7 +12,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class UserService : IUserService
+    internal class UserService : IUserService
     {
         private readonly UserManager<ApplicationUser> userManager;
 
@@ -28,31 +28,25 @@
 
             var user = await userManager.FindByIdAsync(userId);
             var roles = await userManager.GetRolesAsync(user);
-            Claim roleClaim;
 
-            if (roles.Count == 0)
+            var roleClaim = roles.Count switch
             {
-                roleClaim = new Claim(ClaimTypes.Role, "");
-
-            }
-            else
-            {
-                roleClaim = new Claim(ClaimTypes.Role, roles.FirstOrDefault());
-            }
+                0 => new Claim(ClaimTypes.Role, string.Empty),
+                _ => new Claim(ClaimTypes.Role, roles.FirstOrDefault())
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor()
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Email,user.Email ),
+                    new Claim(ClaimTypes.Email,user.Email),
                     new Claim(ClaimTypes.NameIdentifier,userId),
                     roleClaim
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials
-                (new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var encryptedToken = tokenHandler.WriteToken(token);
 

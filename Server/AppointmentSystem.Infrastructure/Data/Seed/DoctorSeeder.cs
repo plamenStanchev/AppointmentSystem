@@ -64,10 +64,10 @@
                 AccountId = accountId,
                 CityId = cityId,
                 DepartmentId = departmentId,
-                PIN =PIN
+                PIN = PIN
             });
             var user = await userManager.FindByIdAsync(accountId);
-            await userManager.AddToRoleAsync(user, RolesNames.DoctorRoleName);
+            await userManager.AddToRoleAsync(user, RolesNames.Doctor);
         }
     }
 }

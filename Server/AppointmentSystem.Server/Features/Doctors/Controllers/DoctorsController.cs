@@ -1,107 +1,105 @@
 ﻿namespace AppointmentSystem.Server.Features.Doctors.Controllers
 {
-    using AppointmentSystem.Core.Entities.Models;
-    using AppointmentSystem.Core.Interfaces.Features;
-    using AppointmentSystem.Infrastructure.Constants;
-    using AppointmentSystem.Infrastructure.Data.Identity;
-    using AppointmentSystem.Infrastructure.Services;
-    using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
-    using AppointmentSystem.Server.Features.Doctors.Models;
-    using AutoMapper;
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
-    using System.Linq;
+	using System.Collections.Generic;
+	using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
-    public class DoctorsController : ApiAccountController
-    {
-        private readonly IDoctorService doctorService;
-        private readonly IMapper mapper;
+	using AppointmentSystem.Core.Entities.Models;
+	using AppointmentSystem.Core.Interfaces.Features;
+	using AppointmentSystem.Infrastructure.Constants;
+	using AppointmentSystem.Infrastructure.Data.Identity;
+	using AppointmentSystem.Infrastructure.Services;
+	using AppointmentSystem.Server.Attributes;
+	using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
+	using AppointmentSystem.Server.Features.Doctors.Models;
+	using AutoMapper;
+	using Microsoft.AspNetCore.Identity;
+	using Microsoft.AspNetCore.Mvc;
 
-        public DoctorsController(
-            IDoctorService doctorService,
-            UserManager<ApplicationUser> userManager,
-            IMapper mapper) : base(userManager)
-        {
-            this.doctorService = doctorService;
-            this.mapper = mapper;
-        }
+	public class DoctorsController : ApiAccountController
+	{
+		private readonly IDoctorService doctorService;
+		private readonly IMapper mapper;
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Get))]
-        public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId)
-        {
-            var validationResult = await base.ValidaiteAccountId(accountId);
-            if (!validationResult)
-            {
-                return this.BadRequest(new DoctorDetailsResponseModel()
-                { Succeeded = false, ErrorMesage = "Problem with Authentication" });
-            }
-            var result = await this.doctorService.GetDoctorAsync(accountId);
-            var doctorResponse = this.mapper.Map<DoctorDetailsResponseModel>(result);
-            doctorResponse.Succeeded = true;
-            return this.Ok(doctorResponse);
-        }
+		public DoctorsController(
+			IDoctorService doctorService,
+			UserManager<ApplicationUser> userManager,
+			IMapper mapper) : base(userManager)
+		{
+			this.doctorService = doctorService;
+			this.mapper = mapper;
+		}
 
-        [HttpPost]
-        [Route(nameof(Create))]
-        public async Task<ActionResult<Result>> Create(DoctorRequsetModel requsetModel)
-        {
-            var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
-            if (!validationResult)
-            {
-                return this.BadRequest("Problem with Authentication");
-            }
-            var doctor = this.mapper.Map<Doctor>(requsetModel);
-            var result = await this.doctorService.CreateDoctorAsynch(doctor);
-            return base.GenerateResultResponse(result);
-        }
+		[Roles(RolesNames.Doctor)]
+		[HttpGet("{action}")]
+		public async Task<ActionResult<DoctorDetailsResponseModel>> Get(string accountId, CancellationToken cancellationToken = default)
+		{
+			var validationResult = await base.ValidateAccountId(accountId);
+			if (!validationResult)
+			{
+				return this.BadRequest("Invalid request");
+			}
+			var result = await this.doctorService.GetDoctorAsync(accountId, cancellationToken);
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Update))]
-        public async Task<ActionResult<Result>> Update(DoctorRequsetModel requsetModel)
-        {
+			if (result is null)
+			{
+				return this.BadRequest("There isn't a doctor with this Id");
+			}
 
-            var validationResult = await base.ValidaiteAccountId(requsetModel.AccountId);
-            if (!validationResult)
-            {
-                return this.BadRequest("Problem with Authentication");
-            }
-            var doctor = this.mapper.Map<Doctor>(requsetModel);
-            var result = await this.doctorService.UpdateDoctorAsync(doctor);
-            return base.GenerateResultResponse(result);
-        }
+			var doctorResponse = this.mapper.Map<DoctorDetailsResponseModel>(result);
 
-        [HttpGet]
-        [Authorize(Roles = RolesNames.DoctorRoleName)]
-        [Route(nameof(Delete))]
-        public async Task<ActionResult<Result>> Delete(string accountId)
-        {
+			return this.Ok(doctorResponse);
+		}
 
-            var validationResult = await base.ValidaiteAccountId(accountId);
-            if (!validationResult)
-            {
-                return this.BadRequest("Problem with Authentication");
-            }
-            var result = await this.doctorService.DeleteDoctorAsync(accountId);
-            var user = await base.userManager.GetUserAsync(this.User);
-            await base.userManager.RemoveFromRoleAsync(user, RolesNames.DoctorRoleName);
-            return base.GenerateResultResponse(result);
-        }
+		[HttpPost(nameof(Create))]
+		public async Task<ActionResult<Result>> Create(DoctorRequestModel requestModel, CancellationToken cancellationToken = default)
+		{
+			var validationResult = await base.ValidateExistAccount(requestModel.AccountId);
+			if (!validationResult)
+			{
+				return this.BadRequest("Problem with Authentication");
+			}
+			var doctor = this.mapper.Map<Doctor>(requestModel);
+			var result = await this.doctorService.CreateDoctorAsync(doctor, cancellationToken);
+			return base.GenerateResultResponse(result);
+		}
 
-        [HttpGet]
-        [Route(nameof(GetInCity))]
-        [Authorize(Roles = RolesNames.DoctorRoleName + "," + RolesNames.PatientRoleName)]
-        public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId)
-        {
-            var result = await this.doctorService.GetDoctorsInCity(cityId);
-            var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
+		[Roles(RolesNames.Doctor)]
+		[HttpGet(nameof(Update))]
+		public async Task<ActionResult<Result>> Update(DoctorRequestModel requestModel, CancellationToken cancellationToken = default)
+		{
+			var validationResult = await base.ValidateAccountId(requestModel.AccountId);
+			if (!validationResult)
+			{
+				return this.BadRequest("Problem with Authentication");
+			}
+			var doctor = this.mapper.Map<Doctor>(requestModel);
+			var result = await this.doctorService.UpdateDoctorAsync(doctor, cancellationToken);
+			return base.GenerateResultResponse(result);
+		}
 
-                dtoResult.ForEach(c => c.Succeeded = true);
-            return this.Ok(dtoResult);
-        }
-    }
+		[Roles(RolesNames.Doctor)]
+		[HttpGet(nameof(Delete))]
+		public async Task<ActionResult<Result>> Delete(string accountId, CancellationToken cancellationToken = default)
+		{
+			var validationResult = await base.ValidateAccountId(accountId);
+			if (!validationResult)
+			{
+				return this.BadRequest("Problem with Authentication");
+			}
+			var result = await this.doctorService.DeleteDoctorAsync(accountId, cancellationToken);
+			var user = await base.userManager.GetUserAsync(this.User);
+			await base.userManager.RemoveFromRoleAsync(user, RolesNames.Doctor);
+			return base.GenerateResultResponse(result);
+		}
+
+		[HttpGet(nameof(GetInCity))]
+		public async Task<ActionResult<IEnumerable<DoctorDetailsResponseModel>>> GetInCity(int cityId, CancellationToken cancellationToken = default)
+		{
+			var result = await this.doctorService.GetDoctorsInCity(cityId, cancellationToken);
+			var dtoResult = result.Select(d => this.mapper.Map<DoctorDetailsResponseModel>(d)).ToList();
+
+			return this.Ok(dtoResult);
+		}
+	}
 }

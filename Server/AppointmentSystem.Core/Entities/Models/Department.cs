@@ -2,6 +2,7 @@
 {
     using AppointmentSystem.Core.Entities.Base;
     using System.Collections.Generic;
+
     public class Department : DeletableEntity
     {
         public int Id { get; set; }

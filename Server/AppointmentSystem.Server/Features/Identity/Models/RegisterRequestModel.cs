@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Server.Features.Identity.Models
 {
     using System.ComponentModel.DataAnnotations;
+
     public class RegisterRequestModel
     {
         [Required]

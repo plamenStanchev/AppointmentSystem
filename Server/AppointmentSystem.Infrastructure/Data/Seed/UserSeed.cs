@@ -1,12 +1,14 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data.Seed
 {
     using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
 
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+
     internal class UserSeed : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
@@ -37,11 +39,11 @@
             string email,
             string id)
         {
-          var result = await userManager.CreateAsync(new ApplicationUser() { Email = email, UserName = userName,Id = id }, password);
-          if (!result.Succeeded)
-          {
-             throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
-          }
+            var result = await userManager.CreateAsync(new ApplicationUser() { Email = email, UserName = userName, Id = id }, password);
+            if (!result.Succeeded)
+            {
+                throw new Exception(string.Join(Environment.NewLine, result.GetError()));
+            }
         }
     }
 }

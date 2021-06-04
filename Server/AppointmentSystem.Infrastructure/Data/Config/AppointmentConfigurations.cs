@@ -3,6 +3,7 @@
     using AppointmentSystem.Core.Entities.Models;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
     public class AppointmentConfigurations : IEntityTypeConfiguration<Appointment>
     {
         public void Configure(EntityTypeBuilder<Appointment> builder)
@@ -35,10 +36,6 @@
 
             builder.Property(a => a.DepartmentId)
                 .IsRequired();
-
-            builder.Property(a => a.AppointmentStart)
-                .IsRequired();
-
         }
     }
 }

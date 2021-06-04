@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data.Seed
 {
     using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Extensions;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -21,9 +22,9 @@
 
             var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
-            await SeedRoleAsync(roleManager, Constants.RolesNames.AdministratorRoleName);
-            await SeedRoleAsync(roleManager, Constants.RolesNames.DoctorRoleName);
-            await SeedRoleAsync(roleManager, Constants.RolesNames.PatientRoleName);
+            await SeedRoleAsync(roleManager, Constants.RolesNames.Admin);
+            await SeedRoleAsync(roleManager, Constants.RolesNames.Doctor);
+            await SeedRoleAsync(roleManager, Constants.RolesNames.Patient);
         }
 
         private async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
@@ -34,7 +35,7 @@
                 var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
                 if (!result.Succeeded)
                 {
-                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
+                    throw new Exception(string.Join(Environment.NewLine, result.GetError()));
                 }
             }
         }

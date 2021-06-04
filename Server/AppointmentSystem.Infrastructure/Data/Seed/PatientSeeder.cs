@@ -65,10 +65,10 @@
                 AccountId = accountId,
                 CityId = cityId,
                 PIN = PIN,
-                Address= address
+                Address = address
             });
             var user = await userManager.FindByIdAsync(accountId);
-            await userManager.AddToRoleAsync(user, RolesNames.PatientRoleName);
+            await userManager.AddToRoleAsync(user, RolesNames.Patient);
         }
     }
 }
