@@ -4,6 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     public class EfRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
@@ -37,11 +38,9 @@
 
         public virtual void Delete(TEntity entity) => this.DbSet.Remove(entity);
 
-        public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
+        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) 
+            => this.Context.SaveChangesAsync(cancellationToken);
 
-        public void Dispose()
-        {
-            this.Context?.Dispose();
-        }
+        public void Dispose() => this.Context?.Dispose();
     }
 }

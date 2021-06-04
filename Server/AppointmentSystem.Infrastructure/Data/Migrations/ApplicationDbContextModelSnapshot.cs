@@ -26,10 +26,10 @@ namespace AppointmentSystem.Infrastructure.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("AppointmentEnd")
+                    b.Property<DateTime?>("AppointmentEnd")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("AppointmentStart")
+                    b.Property<DateTime?>("AppointmentStart")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")

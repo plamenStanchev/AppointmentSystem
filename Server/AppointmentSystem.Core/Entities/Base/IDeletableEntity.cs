@@ -1,6 +1,7 @@
 ﻿namespace AppointmentSystem.Core.Entities.Base
 {
     using System;
+
     public interface IDeletableEntity : IEntity
     {
         DateTime? DeletedOn { get; set; }

@@ -6,7 +6,9 @@
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
+
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {
@@ -23,11 +25,12 @@
 
         public IQueryable<TEntity> AllAsNoTrackingWithDeleted() => base.AllAsNoTracking().IgnoreQueryFilters();
 
-        public Task<TEntity> GetByIdWithDeletedAsync(params object[] id)
+        public Task<TEntity> GetByIdWithDeletedAsync(CancellationToken cancellationToken, params object[] id)
         {
             var getByIdPredicate = EfExpressionHelper.BuildByIdPredicate<TEntity>(this.Context, id);
-            return this.AllWithDeleted().FirstOrDefaultAsync(getByIdPredicate);
+            return this.AllWithDeleted().FirstOrDefaultAsync(getByIdPredicate, cancellationToken);
         }
+
 
         public void HardDelete(TEntity entity) => base.Delete(entity);
 

@@ -2,10 +2,10 @@
 {
     public static class RolesNames
     {
-        public const string PatientRoleName = "Patient";
+        public const string Patient = nameof(Patient);
 
-        public const string AdministratorRoleName = "Admin";
+        public const string Admin = nameof(Admin);
 
-        public const string DoctorRoleName = "Doctor";
+        public const string Doctor = nameof(Doctor);
     }
 }
