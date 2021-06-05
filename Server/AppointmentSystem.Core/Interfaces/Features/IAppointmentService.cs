@@ -15,7 +15,7 @@
 
         public Task<Result> UpdateAppointmentAsync(Appointment appointment, string doctorAccountId, CancellationToken cancellationToken);
 
-        public Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId,CancellationToken cancellationToken);
+        public Task<IEnumerable<Appointment>> GetDoctorsAppointmentsAsync(string accountId, CancellationToken cancellationToken);
 
         public Task<IEnumerable<Appointment>> GetPatientAppointAsync(string accountId, CancellationToken cancellationToken);
 

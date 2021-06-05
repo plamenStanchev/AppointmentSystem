@@ -1,16 +1,16 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data
 {
+    using System;
+    using System.Linq;
+    using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using AppointmentSystem.Core.Entities.Base;
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Infrastructure;
     using AppointmentSystem.Infrastructure.Data.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -38,6 +38,8 @@
 
         public DbSet<Department> Departments { get; set; }
 
+        public DbSet<ApplicationRequest> ApplicationRequests { get; set; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -61,7 +63,6 @@
             base.OnModelCreating(builder);
 
             this.ApplyConfigurations(builder);
-
         }
 
         private void ApplyConfigurations(ModelBuilder builder)
@@ -72,13 +73,13 @@
         {
             builder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);
         }
+
         private void ApplyAuditInformation()
             => this.ChangeTracker
                 .Entries()
                 .ToList()
                 .ForEach(entry =>
                 {
-
                     var userName = this.currentUser.GetUserName();
 
                     if (entry.Entity is IDeletableEntity deletableEntity)
