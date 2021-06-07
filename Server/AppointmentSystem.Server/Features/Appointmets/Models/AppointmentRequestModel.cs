@@ -1,9 +1,9 @@
 ﻿namespace AppointmentSystem.Server.Features.Appointments.Models
 {
-    using AppointmentSystem.Core.Entities.Models;
-    using AppointmentSystem.Mapper;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using AppointmentSystem.Core.Entities.Models;
+    using AppointmentSystem.Mapper;
 
     public class AppointmentRequestModel : IMapTo<Appointment>
     {

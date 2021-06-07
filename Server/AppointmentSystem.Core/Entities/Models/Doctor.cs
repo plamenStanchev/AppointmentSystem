@@ -1,7 +1,8 @@
 ﻿namespace AppointmentSystem.Core.Entities.Models
 {
-    using AppointmentSystem.Core.Entities.Base;
     using System.Collections.Generic;
+
+    using AppointmentSystem.Core.Entities.Base;
 
     public class Doctor : DeletableEntity
     {
@@ -14,6 +15,7 @@
         public string SurName { get; set; }
 
         public string PIN { get; set; }
+
         public string AccountId { get; set; }
 
         public int CityId { get; set; }

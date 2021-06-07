@@ -1,16 +1,17 @@
 ﻿namespace AppointmentSystem.Server.Features.Appointments
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Features;
     using AppointmentSystem.Core.Interfaces.Repository;
     using AppointmentSystem.Infrastructure.Services;
 
     using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     //TODO : Move validation in different methods
     internal class AppointmentService : IAppointmentService
