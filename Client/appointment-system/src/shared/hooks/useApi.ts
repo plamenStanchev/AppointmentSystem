@@ -1,6 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
+
 import { IApiResponse } from "../models/IApiResponse";
 import useToken from "./useToken";
+import Constants from "../constants";
 
 const useApi = () => {
   const { token } = useToken();
@@ -18,7 +20,7 @@ const useApi = () => {
   const createUrlCombiner = (baseUrl: string) => (url: string) =>
     `${baseUrl}${url}`;
 
-  const combineApiUrl = createUrlCombiner("https://localhost:5001/api");
+  const combineApiUrl = createUrlCombiner(`${Constants.ApiUrl}/api`);
   const get = <R>(url: string, config?: AxiosRequestConfig) =>
     axios
       .get<IApiResponse<R>>(combineApiUrl(url), combineConfig(config))
