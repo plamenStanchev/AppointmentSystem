@@ -22,6 +22,6 @@ namespace AppointmentSystem.Core.Entities.Models
 
     public enum StatusEnum
     {
-        Approved, Closed,
+        Sended, Approved, Closed,
     }
 }
