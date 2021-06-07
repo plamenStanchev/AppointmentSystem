@@ -1,4 +1,5 @@
 import useApi from "./useApi";
+import Constants from "../constants";
 
 interface IApplicationRequest {
   accountId: string;
@@ -17,8 +18,6 @@ enum StatusEnum {
   Closed = "Closed",
 }
 
-const path = "ApplicationRequest";
-
 const useApplicationRequest = () => {
   const { post } = useApi();
 
@@ -31,7 +30,10 @@ const useApplicationRequest = () => {
         requestType: TypeRequestEnum.DoctorCreation,
       };
 
-      const doctorRequestResponse = await post(`/${path}`, requestModel);
+      const doctorRequestResponse = await post(
+        `/${Constants.ApplicationRequest}`,
+        requestModel
+      );
 
       if (!doctorRequestResponse.data) {
         throw new Error("Unknown error");
