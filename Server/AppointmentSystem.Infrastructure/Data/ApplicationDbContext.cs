@@ -1,5 +1,6 @@
 ﻿namespace AppointmentSystem.Infrastructure.Data
 {
+    using AppointmentSystem.Core.AdministrationDomain.Entety;
     using AppointmentSystem.Core.Entities.Base;
     using AppointmentSystem.Core.Entities.Models;
     using AppointmentSystem.Core.Interfaces.Infrastructure;
@@ -37,6 +38,10 @@
         public DbSet<Appointment> Appointments { get; set; }
 
         public DbSet<Department> Departments { get; set; }
+
+        public DbSet<DoctorApplication> DoctorApplications { get; set; }
+
+        public DbSet<AdministationInformationEntry>  AdministationInformationEntries { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -79,14 +84,14 @@
                 .ForEach(entry =>
                 {
 
-                    var userName = this.currentUser.GetUserName();
+                    var userId = this.currentUser.GetId();
 
                     if (entry.Entity is IDeletableEntity deletableEntity)
                     {
                         if (entry.State == EntityState.Deleted)
                         {
                             deletableEntity.DeletedOn = DateTime.UtcNow;
-                            deletableEntity.DeletedBy = userName;
+                            deletableEntity.DeletedBy = userId;
                             deletableEntity.IsDeleted = true;
 
                             entry.State = EntityState.Modified;
@@ -100,12 +105,12 @@
                         if (entry.State == EntityState.Added)
                         {
                             entity.CreatedOn = DateTime.UtcNow;
-                            entity.CreatedBy = userName;
+                            entity.CreatedBy = userId;
                         }
                         else if (entry.State == EntityState.Modified)
                         {
                             entity.ModifiedOn = DateTime.UtcNow;
-                            entity.ModifiedBy = userName;
+                            entity.ModifiedBy = userId;
                         }
                     }
                 });

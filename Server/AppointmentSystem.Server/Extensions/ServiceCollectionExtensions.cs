@@ -1,35 +1,38 @@
 ﻿namespace AppointmentSystem.Server.Extensions
 {
-	using System.Linq;
-	using System.Reflection;
-	using System.Text;
-	using System.Threading.Tasks;
-	using AppointmentSystem.Core.Interfaces.Features;
-	using AppointmentSystem.Core.Interfaces.Infrastructure;
-	using AppointmentSystem.Core.Interfaces.Repository;
-	using AppointmentSystem.Infrastructure.Data;
-	using AppointmentSystem.Infrastructure.Data.Identity;
-	using AppointmentSystem.Infrastructure.Data.Repositories;
-	using AppointmentSystem.Infrastructure.Logging;
-	using AppointmentSystem.Infrastructure.Services;
-	using AppointmentSystem.Mapper;
-	using AppointmentSystem.Server.Features.Appointments;
-	using AppointmentSystem.Server.Features.Cities;
-	using AppointmentSystem.Server.Features.Department;
-	using AppointmentSystem.Server.Features.Doctors;
-	using AppointmentSystem.Server.Features.Identity;
-	using AppointmentSystem.Server.Features.Patients;
-	using AppointmentSystem.Server.Filters;
-	using AppointmentSystem.Server.Requirements;
-	using Microsoft.AspNetCore.Authentication.JwtBearer;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.EntityFrameworkCore;
-	using Microsoft.Extensions.Configuration;
-	using Microsoft.Extensions.DependencyInjection;
-	using Microsoft.IdentityModel.Tokens;
-	using Microsoft.OpenApi.Models;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text;
+    using System.Threading.Tasks;
+    using AppointmentSystem.Core.AdministrationDomain.Entety;
+    using AppointmentSystem.Core.AdministrationDomain.Service;
+    using AppointmentSystem.Core.Interfaces.Features;
+    using AppointmentSystem.Core.Interfaces.Infrastructure;
+    using AppointmentSystem.Core.Interfaces.Repository;
+    using AppointmentSystem.Infrastructure.Data;
+    using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Data.Repositories;
+    using AppointmentSystem.Infrastructure.Logging;
+    using AppointmentSystem.Infrastructure.Services;
+    using AppointmentSystem.Mapper;
+    using AppointmentSystem.Server.ApplicationOptions;
+    using AppointmentSystem.Server.Features.Appointments;
+    using AppointmentSystem.Server.Features.Cities;
+    using AppointmentSystem.Server.Features.Department;
+    using AppointmentSystem.Server.Features.Doctors;
+    using AppointmentSystem.Server.Features.Identity;
+    using AppointmentSystem.Server.Features.Patients;
+    using AppointmentSystem.Server.Filters;
+    using AppointmentSystem.Server.Requirements;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
 
-	public static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
 	{
 		public static IServiceCollection AddSignalRExtension(this IServiceCollection services)
 		{
@@ -46,6 +49,10 @@
 			services.Configure<AppSettings>(applicationSettingsConfiguration);
 			return applicationSettingsConfiguration.Get<AppSettings>();
 		}
+		public static IServiceCollection AddApplicationOptionsBind(
+			this IServiceCollection services,
+			IConfiguration configuration)
+			=> services.Configure<CacheKeys>(configuration.GetSection("CacheKeys"));
 		public static IServiceCollection AddDatabase(
 			 this IServiceCollection services,
 			 IConfiguration configuration)
@@ -66,7 +73,8 @@
 				.AddTransient<IDoctorService, DoctorService>()
 				.AddTransient<IPatientService, PatientService>()
 				.AddTransient<IAppointmentService, AppointmentService>()
-				.AddTransient(a => AutoMapperConfig.MapperInstance);
+				.AddTransient(a => AutoMapperConfig.MapperInstance)
+				.AddTransient<IApplicationService<DoctorApplication>, DoctorApplicationService>();
 
 		public static IServiceCollection AddIdentity(this IServiceCollection services)
 		{
@@ -122,6 +130,8 @@
 			{
 
 			});
+		public static IServiceCollection AddApplicationCache(this IServiceCollection services)
+			=> services.AddMemoryCache();
 
 		public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, AppSettings appSettings)
 		{

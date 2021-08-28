@@ -1,18 +1,19 @@
 ﻿namespace AppointmentSystem.Server.Features.Identity.Controllers
 {
-	using System.Linq;
-	using System.Threading.Tasks;
-	using AppointmentSystem.Core.Interfaces.Features;
-	using AppointmentSystem.Infrastructure.Data.Identity;
-	using AppointmentSystem.Infrastructure.Extensions;
-	using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
-	using AppointmentSystem.Server.Features.Identity.Models;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Identity;
-	using Microsoft.AspNetCore.Mvc;
-	using Microsoft.Extensions.Options;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using AppointmentSystem.Core.Interfaces.Features;
+    using AppointmentSystem.Infrastructure.Data.Identity;
+    using AppointmentSystem.Infrastructure.Extensions;
+    using AppointmentSystem.Server.ApplicationOptions;
+    using AppointmentSystem.Server.Features.BaseFeatures.Controllers;
+    using AppointmentSystem.Server.Features.Identity.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Options;
 
-	public class IdentityController : ApiController
+    public class IdentityController : ApiController
 	{
 		private readonly UserManager<ApplicationUser> userManager;
 		private readonly IUserService userService;

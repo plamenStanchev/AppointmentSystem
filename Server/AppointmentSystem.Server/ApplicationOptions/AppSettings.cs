@@ -1,4 +1,4 @@
-﻿namespace AppointmentSystem.Server
+﻿namespace AppointmentSystem.Server.ApplicationOptions
 {
     public class AppSettings
     {
