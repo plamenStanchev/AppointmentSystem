@@ -13,6 +13,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -21,12 +22,12 @@
     {
         private readonly IMapper mapper;
         private readonly IApplicationService<DoctorApplication> applicationService;
-        private readonly IDeletableEntityRepository<DoctorApplication> docotrApplicatonDeletableEntityRepository;
+        private readonly IDeletableDoctorApplicationRepository<DoctorApplication> docotrApplicatonDeletableEntityRepository;
         public ApplicationControlelr(
             IMapper mapper,
             IApplicationService<DoctorApplication> applicationService,
             UserManager<ApplicationUser> userManager,
-            IDeletableEntityRepository<DoctorApplication> docotrApplicatonDeletableEntityRepository)
+            IDeletableDoctorApplicationRepository<DoctorApplication> docotrApplicatonDeletableEntityRepository)
             : base(userManager)
         {
             this.mapper = mapper;
@@ -81,5 +82,30 @@
 
             return  this.mapper.Map<DoctorApplicationModel>(doctorApplication);
         }
+
+        [Roles(RolesNames.Admin)]
+        public async Task<IEnumerable<DoctorApplicationModel>> GetAllPendingApplications(PaginetionRequestModel paginetionRequestModel, CancellationToken cancellation = default)
+        {
+            var validationResult = ValidatePagination(paginetionRequestModel);
+            if (validationResult.Failure == true)
+            {
+                throw new System.ArgumentException(message: validationResult.Error);
+            }
+            var applicationResult = await this.docotrApplicatonDeletableEntityRepository.GetAllPendingApplications(paginetionRequestModel.PageSize, paginetionRequestModel.PageNumber, cancellation);
+            if (applicationResult is null)
+            {
+                return null;
+            }
+            return applicationResult.Select(a => this.mapper.Map<DoctorApplicationModel>(a));
+        }
+
+        private static Result ValidatePagination(PaginetionRequestModel paginetionRequestModel) //if Paginetion is used in other controllers this method and the PaginetionRequestModel shud be moved in a separated class
+        {
+            if (paginetionRequestModel.PageSize > PagenationSize.MaxPagesize)
+            {
+                return $"The Page size is bigger than maximum limit the limit is {PagenationSize.MaxPagesize}";
+            }
+            return true;
+        } 
     }
 }
