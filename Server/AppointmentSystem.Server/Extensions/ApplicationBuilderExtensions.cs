@@ -30,6 +30,6 @@
 		}
 
 		public static void AddMapperProfiles(this IApplicationBuilder _)
-			=> AutoMapperConfig.RegisterMappings(Assembly.GetAssembly(typeof(Startup)));
+			=> AutoMapperConfig.RegisterMappings(Assembly.GetAssembly(typeof(Program)));
 	}
 }
